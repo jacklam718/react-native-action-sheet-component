@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, Animated, StyleSheet, ScrollView, Easing, Dimensions } from 'react-native';
+import { View, Animated, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import AnimatedOverlay from 'react-native-animated-overlay';
 
 import Animation from './Animation';
