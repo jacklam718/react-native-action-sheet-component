@@ -65,18 +65,14 @@ class ActionSheet extends Component {
 
   static defaultProps = defaultProps
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
       show: props.show,
       actionSheetState: ACTION_SHEET_CLOSED,
-      // animation: new Animation(0),
-      transformOffsetY: new Animated.Value(INITIAL_POSITION),
+      animation: new Animation(INITIAL_POSITION),
     };
-
-
-    this.animation = new Animation(INITIAL_POSITION);
   }
 
   componentDidMount() {
@@ -85,8 +81,14 @@ class ActionSheet extends Component {
     }
   }
 
-  onOverlayPress = () => {
-    this.hide();
+  componentWillReceiveProps(nextProps) {
+    if (this.props.show !== nextProps.show) {
+      if (nextProps.show) {
+        this.show();
+      } else {
+        this.hide();
+      }
+    }
   }
 
   setActionSheetState(toValue: number, callback?: Function = () => {}): void {
@@ -97,13 +99,17 @@ class ActionSheet extends Component {
 
     this.setState({ actionSheetState });
 
-    this.animation.toValue(toValue, animationDuration, () => {
+    this.state.animation.toValue(toValue, animationDuration, () => {
       const isClosing = (this.state.actionSheetState === ACTION_SHEET_CLOSING);
       actionSheetState = isClosing ? ACTION_SHEET_CLOSED : ACTION_SHEET_OPENED;
 
       this.setState({ actionSheetState });
       callback();
     });
+  }
+
+  onOverlayPress = () => {
+    this.hide();
   }
 
   show = (callback?: Function = () => {}): void => {
@@ -124,7 +130,7 @@ class ActionSheet extends Component {
 
   render() {
     const { children, animationDuration, overlayOpacity } = this.props;
-    const { actionSheetState } = this.state;
+    const { actionSheetState, animation: { animations } } = this.state;
 
     const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
     const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
@@ -138,7 +144,7 @@ class ActionSheet extends Component {
           opacity={overlayOpacity}
         />
         <Animated.View
-          style={[styles.contentContainer, this.animation.animations]}
+          style={[styles.contentContainer, animations]}
         >
           <ScrollView style={styles.scrollView}>
             {children}
