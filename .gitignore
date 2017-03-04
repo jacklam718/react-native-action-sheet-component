@@ -1,0 +1,6 @@
+action-sheet-example/node_modules/*
+action-sheet-example/.exponent/*
+node_modules/*
+npm-debug.*
+exp.json
+main.js

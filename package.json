@@ -1,0 +1,23 @@
+{
+  "name": "react-native-action-sheet-component",
+  "version": "0.0.1",
+  "description": "React Native Action Sheet Component for iOS & Android.",
+  "main": "src/index.js",
+  "repository": "git@github.com:jacklam718/react-native-action-sheet-component.git",
+  "author": "Jack Lam <jacklam718@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.17.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.0",
+    "flow-bin": "^0.40.0"
+  },
+  "dependencies": {
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-react-native": "^1.9.1",
+    "react-native-animated-overlay": "^0.0.5"
+  }
+}
