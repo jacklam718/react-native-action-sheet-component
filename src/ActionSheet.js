@@ -115,6 +115,7 @@ class ActionSheet extends Component {
   show = (callback?: Function = () => {}): void => {
     const { onShow } = this.props;
 
+    this.setState({ show: true });
     this.setActionSheetState(SHOW_POSITION);
     onShow();
     callback();
@@ -123,6 +124,7 @@ class ActionSheet extends Component {
   hide = (callback?: Function = () => {}): void => {
     const { onHide } = this.props;
 
+    this.setState({ show: false });
     this.setActionSheetState(INITIAL_POSITION);
     onHide();
     callback();
