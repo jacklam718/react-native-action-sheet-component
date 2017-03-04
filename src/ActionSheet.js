@@ -85,16 +85,6 @@ class ActionSheet extends Component {
     }
   }
 
-  doAnimation(toValue, onFinished?: Function = () => {}) {
-    const { animationDuration } = this.props;
-
-    Animated.timing(this.state.transformOffsetY, {
-      toValue,
-      duration: animationDuration,
-      easing: Easing.inOut(Easing.quad),
-    }).start(onFinished);
-  }
-
   onOverlayPress = () => {
     this.hide();
   }
