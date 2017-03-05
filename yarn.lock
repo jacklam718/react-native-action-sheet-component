@@ -21,8 +21,8 @@ ajv-keywords@^1.0.0:
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-1.5.1.tgz#314dd0a4b3368fad3dfcdc54ede6171b886daf3c"
 
 ajv@^4.7.0:
-  version "4.11.3"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.3.tgz#ce30bdb90d1254f762c75af915fb3a63e7183d22"
+  version "4.11.4"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.4.tgz#ebf3a55d4b132ea60ff5847ae85d2ef069960b45"
   dependencies:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
@@ -1284,9 +1284,9 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-react-native-animated-overlay@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/react-native-animated-overlay/-/react-native-animated-overlay-0.0.5.tgz#ae861501a18c9893f9fdb9d23ce51854e9ae9999"
+react-native-animated-overlay@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-animated-overlay/-/react-native-animated-overlay-0.0.6.tgz#ab5aedda8be9dfadd9198df24ac27dfc49d1fb54"
 
 react-proxy@^1.1.7:
   version "1.1.8"
