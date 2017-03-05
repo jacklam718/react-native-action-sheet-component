@@ -35,6 +35,12 @@ const styles = StyleSheet.create({
   },
   scrollView: {
   },
+  hidden: {
+    top: -10000,
+    left: 0,
+    height: 0,
+    width: 0,
+  },
 });
 
 type Props = {
@@ -47,6 +53,8 @@ type Props = {
   onChange?: () => void;
   multi?: boolean;
   showSparator?: boolean;
+  defaultSelected: any;
+  hideOnSelceted?: boolean;
   children?: any;
 };
 
@@ -60,6 +68,8 @@ const defaultProps = {
   onChange: () => {},
   multi: false,
   showSparator: true,
+  defaultSelected: null,
+  hideOnSelceted: true,
   children: null,
 };
 
@@ -71,9 +81,25 @@ class ActionSheet extends Component {
   constructor(props: Props) {
     super(props);
 
+    // set default selected
+    const { defaultSelected } = props;
+    const selectedData = {};
+    props.children.forEach((child, index) => {
+      (Array.isArray(defaultSelected) ? defaultSelected : [defaultSelected]).forEach((selected) => {
+        if (child.props.value === selected) {
+          if (props.multi) {
+            selectedData[index] = child.props.value;
+          } else if (Object.keys(selectedData).length === 0) {
+            selectedData[index] = child.props.value;
+          }
+        }
+      });
+    });
+
+
     this.state = {
       show: props.show,
-      selectedData: {},
+      selectedData,
       actionSheetState: ACTION_SHEET_CLOSED,
       actionSheetAnimation: new Animation(this.hideActionSheetPosition),
     };
@@ -86,6 +112,10 @@ class ActionSheet extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (this.props.position !== nextProps.position) {
+      this.setState({ actionSheetAnimation: new Animation(this.hideActionSheetPosition) });
+    }
+
     if (this.props.show !== nextProps.show) {
       if (nextProps.show) {
         this.show();
@@ -93,6 +123,14 @@ class ActionSheet extends Component {
         this.hide();
       }
     }
+
+    nextProps.children.forEach((child, index) => {
+      if (child.props.selected && !this.state.selectedData[index]) {
+        const selectedData = { ...this.state.selectedData };
+        selectedData[index] = child.props.value;
+        this.setState({ selectedData });
+      }
+    });
   }
 
   get showActionSheetPosition(): string {
@@ -159,6 +197,11 @@ class ActionSheet extends Component {
   }
 
   onItemPress(value, index): void {
+    const { hideOnSelceted } = this.props;
+    if (hideOnSelceted) {
+      this.hide();
+    }
+
     if (this.state.selectedData[index]) {
       this.unselectItem(value, index);
       return;
@@ -208,10 +251,10 @@ class ActionSheet extends Component {
     return Children.map(children, (child, index) => {
       const item = cloneElement(child, {
         index,
-        selected: this.isItemSelected(index),
-        onPress: (value, index) => {
-          child.props.onPress(value, index);
-          this.onItemPress(value, index);
+        selected: child.props.selected || this.isItemSelected(index),
+        onPress: (value, selectedIndex) => {
+          child.props.onPress(value, selectedIndex);
+          this.onItemPress(value, selectedIndex);
         },
       });
 
@@ -230,6 +273,7 @@ class ActionSheet extends Component {
 
     const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
     const pointerEvents = (actionSheetState === ACTION_SHEET_OPENED) ? 'auto' : 'none';
+    const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
 
     const contentPosition = (position === 'top')
       ? { top: INITIAL_TOP_POSITION }
@@ -240,7 +284,7 @@ class ActionSheet extends Component {
       : null;
 
     return (
-      <View style={[styles.container]}>
+      <View style={[styles.container, hidden]}>
         <AnimatedOverlay
           onPress={this.onOverlayPress}
           overlayShow={overlayShow}
