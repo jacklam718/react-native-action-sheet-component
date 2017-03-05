@@ -12,6 +12,7 @@ export default class Animation {
       toValue,
       duration,
       easing: Easing.inOut(Easing.quad),
+      useNativeDriver: true,
     }).start(onFinished);
   }
 
