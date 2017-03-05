@@ -155,6 +155,7 @@ class ActionSheet extends Component {
     const { actionSheetState, actionSheetAnimation: { animations } } = this.state;
 
     const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
+    const pointerEvents = (actionSheetState === ACTION_SHEET_OPENED) ? 'auto' : 'none';
 
     const contentPosition = (position === 'top')
       ? { top: INITIAL_TOP_POSITION }
@@ -171,6 +172,7 @@ class ActionSheet extends Component {
           overlayShow={overlayShow}
           duration={animationDuration}
           opacity={overlayOpacity}
+          pointerEvents={pointerEvents}
         />
         <Animated.View
           style={[styles.contentContainer, contentPosition, animations]}
