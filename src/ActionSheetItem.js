@@ -3,7 +3,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
 
-const selectedIcon = require('./img/checkmark.png');
+const DEFAULT_SELECTED_ICON: number = require('./img/checkmark.png');
 
 const styles = StyleSheet.create({
   container: {
@@ -36,6 +36,8 @@ const styles = StyleSheet.create({
 
 type Props = {
   text: any;
+  value?: any;
+  index?: number;
   icon?: any;
   selectedIcon?: any;
   selected?: boolean;
@@ -44,14 +46,16 @@ type Props = {
 }
 
 const defaultProps = {
+  value: null,
   icon: null,
-  selectedIcon,
+  index: null,
+  selectedIcon: DEFAULT_SELECTED_ICON,
   selected: false,
   onPress: () => {},
   style: null,
 };
 
-function ActionSheetItem({ onPress, style, icon, text, selectedIcon, selected }: Props) {
+function ActionSheetItem({ text, value, index, onPress, style, icon, selectedIcon, selected }: Props) {
   let iconOnSelected;
   if (selected) {
     iconOnSelected = (
@@ -64,7 +68,12 @@ function ActionSheetItem({ onPress, style, icon, text, selectedIcon, selected }:
   ) : null;
 
   return (
-    <TouchableHighlight onPress={onPress} underlayColor="#EDEDED">
+    <TouchableHighlight
+      onPress={() => {
+        onPress(value, index);
+      }}
+      underlayColor="#EDEDED"
+    >
       <View style={[styles.container, style]}>
         <View style={styles.itemContent}>
           {itemIcon}

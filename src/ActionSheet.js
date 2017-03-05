@@ -1,9 +1,10 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Children, cloneElement, type ReactElement } from 'react';
 import { View, Animated, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import AnimatedOverlay from 'react-native-animated-overlay';
 
+import Separator from './Separator';
 import Animation from './Animation';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
@@ -43,6 +44,9 @@ type Props = {
   animationDuration?: number;
   overlayOpacity?: number;
   position?: 'top' | 'bottom';
+  onChange?: () => void;
+  multi?: boolean;
+  showSparator?: boolean;
   children?: any;
 };
 
@@ -53,6 +57,9 @@ const defaultProps = {
   animationDuration: DEFAULT_ANIMATION_DURATION,
   overlayOpacity: 0.3,
   position: 'top',
+  onChange: () => {},
+  multi: false,
+  showSparator: true,
   children: null,
 };
 
@@ -66,6 +73,7 @@ class ActionSheet extends Component {
 
     this.state = {
       show: props.show,
+      selectedData: {},
       actionSheetState: ACTION_SHEET_CLOSED,
       actionSheetAnimation: new Animation(this.hideActionSheetPosition),
     };
@@ -103,6 +111,10 @@ class ActionSheet extends Component {
     return INITIAL_BOTTOM_POSITION * -1;
   }
 
+  onOverlayPress = (): void => {
+    this.hide();
+  }
+
   setActionSheetState(toValue: number, callback?: Function = () => {}): void {
     const { animationDuration } = this.props;
     const isClosed = (this.state.actionSheetState === ACTION_SHEET_CLOSED);
@@ -118,10 +130,6 @@ class ActionSheet extends Component {
       this.setState({ actionSheetState });
       callback();
     });
-  }
-
-  onOverlayPress = (): void => {
-    this.hide();
   }
 
   show = (callback?: Function = () => {}): void => {
@@ -150,8 +158,74 @@ class ActionSheet extends Component {
     callback();
   }
 
+  onItemPress(value, index): void {
+    if (this.state.selectedData[index]) {
+      this.unselectItem(value, index);
+      return;
+    }
+
+    this.selectItem(value, index);
+  }
+
+  selectItem(value, index) {
+    const { multi: isMultiSelect, onChange } = this.props;
+    let selectedData;
+
+    if (isMultiSelect) {
+      selectedData = { ...this.state.selectedData };
+    } else {
+      selectedData = {};
+    }
+
+    selectedData[index] = value;
+    this.setState({ selectedData });
+    onChange(value, index);
+  }
+
+  unselectItem(value, index) {
+    const { multi: isMultiSelect, onChange } = this.props;
+    let selectedData;
+
+    if (isMultiSelect) {
+      selectedData = { ...this.state.selectedData };
+      delete selectedData[index];
+    } else {
+      selectedData = {};
+    }
+
+    this.setState({ selectedData });
+    onChange(value, index);
+  }
+
+  isItemSelected(index): boolean {
+    return !!this.state.selectedData[index];
+  }
+
+  renderItems(): ReactElement {
+    const { children, showSparator } = this.props;
+    const separator = showSparator ? <Separator /> : null;
+
+    return Children.map(children, (child, index) => {
+      const item = cloneElement(child, {
+        index,
+        selected: this.isItemSelected(index),
+        onPress: (value, index) => {
+          child.props.onPress(value, index);
+          this.onItemPress(value, index);
+        },
+      });
+
+      return (
+        <View style={{ flex: 1 }}>
+          {item}
+          {separator}
+        </View>
+      );
+    });
+  }
+
   render() {
-    const { children, animationDuration, overlayOpacity, position } = this.props;
+    const { animationDuration, overlayOpacity, position } = this.props;
     const { actionSheetState, actionSheetAnimation: { animations } } = this.state;
 
     const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
@@ -178,7 +252,7 @@ class ActionSheet extends Component {
           style={[styles.contentContainer, contentPosition, animations]}
         >
           <ScrollView style={[styles.scrollView, scrollView]}>
-            {children}
+            {this.renderItems()}
           </ScrollView>
         </Animated.View>
       </View>
