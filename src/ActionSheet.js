@@ -6,7 +6,7 @@ import AnimatedOverlay from 'react-native-animated-overlay';
 
 import Animation from './Animation';
 
-const { width: WIDTH } = Dimensions.get('window');
+const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 // action sheet states
 const ACTION_SHEET_OPENING: string = 'opening';
@@ -15,8 +15,9 @@ const ACTION_SHEET_CLOSING: string = 'closing';
 const ACTION_SHEET_CLOSED: string = 'closed';
 
 const DEFAULT_ANIMATION_DURATION: number = 250;
-const SHOW_POSITION: number = 0;
-const INITIAL_POSITION: number = -180;
+
+const INITIAL_TOP_POSITION: number = -180;
+const INITIAL_BOTTOM_POSITION: number = HEIGHT * -1;
 
 
 const styles = StyleSheet.create({
@@ -25,20 +26,13 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     backgroundColor: 'white',
-    zIndex: 1000,
   },
   contentContainer: {
     width: WIDTH,
+    position: 'absolute',
     backgroundColor: 'white',
   },
   scrollView: {
-    paddingTop: 30,
-  },
-  hidden: {
-    top: -10000,
-    left: 0,
-    height: 0,
-    width: 0,
   },
 });
 
@@ -48,6 +42,7 @@ type Props = {
   show?: boolean;
   animationDuration?: number;
   overlayOpacity?: number;
+  position?: 'top' | 'bottom';
   children?: any;
 };
 
@@ -57,6 +52,7 @@ const defaultProps = {
   show: false,
   animationDuration: DEFAULT_ANIMATION_DURATION,
   overlayOpacity: 0.3,
+  position: 'top',
   children: null,
 };
 
@@ -71,7 +67,7 @@ class ActionSheet extends Component {
     this.state = {
       show: props.show,
       actionSheetState: ACTION_SHEET_CLOSED,
-      animation: new Animation(INITIAL_POSITION),
+      actionSheetAnimation: new Animation(this.hideActionSheetPosition),
     };
   }
 
@@ -91,6 +87,22 @@ class ActionSheet extends Component {
     }
   }
 
+  get showActionSheetPosition(): string {
+    const { position } = this.props;
+    if (position === 'top') {
+      return INITIAL_TOP_POSITION * -1;
+    }
+    return 0;
+  }
+
+  get hideActionSheetPosition(): string {
+    const { position } = this.props;
+    if (position === 'top') {
+      return INITIAL_TOP_POSITION;
+    }
+    return INITIAL_BOTTOM_POSITION * -1;
+  }
+
   setActionSheetState(toValue: number, callback?: Function = () => {}): void {
     const { animationDuration } = this.props;
     const isClosed = (this.state.actionSheetState === ACTION_SHEET_CLOSED);
@@ -99,7 +111,7 @@ class ActionSheet extends Component {
 
     this.setState({ actionSheetState });
 
-    this.state.animation.toValue(toValue, animationDuration, () => {
+    this.state.actionSheetAnimation.toValue(toValue, animationDuration, () => {
       const isClosing = (this.state.actionSheetState === ACTION_SHEET_CLOSING);
       actionSheetState = isClosing ? ACTION_SHEET_CLOSED : ACTION_SHEET_OPENED;
 
@@ -108,37 +120,52 @@ class ActionSheet extends Component {
     });
   }
 
-  onOverlayPress = () => {
+  onOverlayPress = (): void => {
     this.hide();
   }
 
   show = (callback?: Function = () => {}): void => {
+    if ([ACTION_SHEET_OPENING, ACTION_SHEET_OPENED].includes(this.state.actionSheetState)) {
+      return;
+    }
+
     const { onShow } = this.props;
 
     this.setState({ show: true });
-    this.setActionSheetState(SHOW_POSITION);
+    this.setActionSheetState(this.showActionSheetPosition);
     onShow();
     callback();
   }
 
   hide = (callback?: Function = () => {}): void => {
+    if ([ACTION_SHEET_CLOSING, ACTION_SHEET_CLOSED].includes(this.state.actionSheetState)) {
+      return;
+    }
+
     const { onHide } = this.props;
 
     this.setState({ show: false });
-    this.setActionSheetState(INITIAL_POSITION);
+    this.setActionSheetState(this.hideActionSheetPosition);
     onHide();
     callback();
   }
 
   render() {
-    const { children, animationDuration, overlayOpacity } = this.props;
-    const { actionSheetState, animation: { animations } } = this.state;
+    const { children, animationDuration, overlayOpacity, position } = this.props;
+    const { actionSheetState, actionSheetAnimation: { animations } } = this.state;
 
     const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
-    const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
+
+    const contentPosition = (position === 'top')
+      ? { top: INITIAL_TOP_POSITION }
+      : { bottom: INITIAL_BOTTOM_POSITION };
+
+    const scrollView = (position === 'top')
+      ? { paddingTop: 30 }
+      : null;
 
     return (
-      <View style={[styles.container, hidden]}>
+      <View style={[styles.container]}>
         <AnimatedOverlay
           onPress={this.onOverlayPress}
           overlayShow={overlayShow}
@@ -146,9 +173,9 @@ class ActionSheet extends Component {
           opacity={overlayOpacity}
         />
         <Animated.View
-          style={[styles.contentContainer, animations]}
+          style={[styles.contentContainer, contentPosition, animations]}
         >
-          <ScrollView style={styles.scrollView}>
+          <ScrollView style={[styles.scrollView, scrollView]}>
             {children}
           </ScrollView>
         </Animated.View>
