@@ -3,6 +3,7 @@
 import React, { Component, Children, cloneElement, type ReactElement } from 'react';
 import { View, Animated, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import AnimatedOverlay from 'react-native-animated-overlay';
+import _ from 'lodash';
 
 import Separator from './Separator';
 import Animation from './Animation';
@@ -51,9 +52,10 @@ type Props = {
   overlayOpacity?: number;
   position?: 'top' | 'bottom';
   onChange?: () => void;
-  multi?: boolean;
+  multiple?: boolean;
   showSparator?: boolean;
-  defaultSelected: any;
+  value?: any;
+  defaultValue?: any;
   hideOnSelceted?: boolean;
   children?: any;
 };
@@ -66,9 +68,10 @@ const defaultProps = {
   overlayOpacity: 0.3,
   position: 'top',
   onChange: () => {},
-  multi: false,
+  multiple: false,
   showSparator: true,
-  defaultSelected: null,
+  value: null,
+  defaultValue: null,
   hideOnSelceted: true,
   children: null,
 };
@@ -81,25 +84,14 @@ class ActionSheet extends Component {
   constructor(props: Props) {
     super(props);
 
-    // set default selected
-    const { defaultSelected } = props;
-    const selectedData = {};
-    props.children.forEach((child, index) => {
-      (Array.isArray(defaultSelected) ? defaultSelected : [defaultSelected]).forEach((selected) => {
-        if (child.props.value === selected) {
-          if (props.multi) {
-            selectedData[index] = child.props.value;
-          } else if (Object.keys(selectedData).length === 0) {
-            selectedData[index] = child.props.value;
-          }
-        }
-      });
-    });
-
+    let initValue = (props.value || props.defaultValue);
+    initValue = Array.isArray(initValue)
+      ? initValue
+      : (initValue === null && []) || [initValue];
 
     this.state = {
       show: props.show,
-      selectedData,
+      selectedData: initValue,
       actionSheetState: ACTION_SHEET_CLOSED,
       actionSheetAnimation: new Animation(this.hideActionSheetPosition),
     };
@@ -124,13 +116,17 @@ class ActionSheet extends Component {
       }
     }
 
-    nextProps.children.forEach((child, index) => {
-      if (child.props.selected && !this.state.selectedData[index]) {
-        const selectedData = { ...this.state.selectedData };
-        selectedData[index] = child.props.value;
-        this.setState({ selectedData });
-      }
-    });
+
+    if (!_.isEqual(this.props.value, nextProps.value)) {
+      const selectedData = [];
+      nextProps.value.forEach((value) => {
+        if (!this.props.multiple && selectedData.length !== 0) {
+          return;
+        }
+        selectedData.push(value);
+      });
+      this.setState({ selectedData });
+    }
   }
 
   get showActionSheetPosition(): string {
@@ -199,10 +195,10 @@ class ActionSheet extends Component {
   onItemPress(value, index): void {
     const { hideOnSelceted } = this.props;
     if (hideOnSelceted) {
-      this.hide();
+      // this.hide();
     }
 
-    if (this.state.selectedData[index]) {
+    if (Object.values(this.state.selectedData).includes(value)) {
       this.unselectItem(value, index);
       return;
     }
@@ -211,33 +207,29 @@ class ActionSheet extends Component {
   }
 
   selectItem(value, index) {
-    const { multi: isMultiSelect, onChange } = this.props;
-    let selectedData;
+    const { multiple: isMultiSelect, onChange } = this.props;
+    let selectedData = [];
 
     if (isMultiSelect) {
-      selectedData = { ...this.state.selectedData };
-    } else {
-      selectedData = {};
+      selectedData = [...this.state.selectedData];
     }
 
-    selectedData[index] = value;
+    selectedData.push(value);
     this.setState({ selectedData });
-    onChange(value, index);
+    onChange(value, index, selectedData);
   }
 
   unselectItem(value, index) {
-    const { multi: isMultiSelect, onChange } = this.props;
-    let selectedData;
+    const { multiple: isMultiSelect, onChange } = this.props;
+    let selectedData = [];
 
     if (isMultiSelect) {
-      selectedData = { ...this.state.selectedData };
-      delete selectedData[index];
-    } else {
-      selectedData = {};
+      selectedData = [...this.state.selectedData];
+      selectedData.splice(index, 1);
     }
 
     this.setState({ selectedData });
-    onChange(value, index);
+    onChange(value, index, selectedData);
   }
 
   isItemSelected(index): boolean {
@@ -248,13 +240,14 @@ class ActionSheet extends Component {
     const { children, showSparator } = this.props;
     const separator = showSparator ? <Separator /> : null;
 
-    return Children.map(children, (child, index) => {
+    return Children.map(children, (child) => {
+      const index = this.state.selectedData.indexOf(child.value);
       const item = cloneElement(child, {
         index,
-        selected: child.props.selected || this.isItemSelected(index),
-        onPress: (value, selectedIndex) => {
-          child.props.onPress(value, selectedIndex);
-          this.onItemPress(value, selectedIndex);
+        selected: this.state.selectedData.includes(child.props.value),
+        onPress: (selectedValue, selectedIndex) => {
+          child.props.onPress(selectedValue, selectedIndex);
+          this.onItemPress(selectedValue, selectedIndex);
         },
       });
 
