@@ -238,10 +238,15 @@ class ActionSheet extends Component {
 
   renderItems(): ReactElement {
     const { children, showSparator } = this.props;
-    const separator = showSparator ? <Separator /> : null;
 
-    return Children.map(children, (child) => {
+    return Children.map(children, (child, i) => {
+      let separator = null;
       const index = this.state.selectedData.indexOf(child.value);
+
+      if (showSparator && i < children.length - 1) {
+        separator = <Separator />;
+      }
+
       const item = cloneElement(child, {
         index,
         selected: this.state.selectedData.includes(child.props.value),
