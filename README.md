@@ -3,8 +3,9 @@ React Native Action Sheet Component for iOS & Android.
 
 Pull request are welcomed. Please follow the Airbnb style guide [Airbnb JavaScript](https://github.com/airbnb/javascript)
 
-#### Preview
+[Try it with Exponent](https://exp.host/@jacklam718/action-sheet-example)
 
+#### Preview
 <img src="https://raw.githubusercontent.com/jacklam718/react-native-action-sheet-component/master/.github/action-sheet.gif" width="300">
 <img src="https://raw.githubusercontent.com/jacklam718/react-native-action-sheet-component/master/.github/action-sheet.png" width="300">
 
