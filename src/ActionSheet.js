@@ -268,7 +268,7 @@ class ActionSheet extends Component {
     const pointerEvents = (actionSheetState === ACTION_SHEET_OPENED) ? 'auto' : 'none';
     const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
 
-    const contentPosition = (position === 'top')
+    const actionSheetPosition = (position === 'top')
       ? { top: INITIAL_TOP_POSITION }
       : { bottom: INITIAL_BOTTOM_POSITION };
 
@@ -286,7 +286,7 @@ class ActionSheet extends Component {
           pointerEvents={pointerEvents}
         />
         <Animated.View
-          style={[styles.contentContainer, contentPosition, animations]}
+          style={[styles.contentContainer, actionSheetPosition, animations]}
         >
           <ScrollView style={[styles.scrollView, scrollView]}>
             {this.renderItems()}
