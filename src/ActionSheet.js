@@ -195,7 +195,7 @@ class ActionSheet extends Component {
   onItemPress(value, index): void {
     const { hideOnSelceted } = this.props;
     if (hideOnSelceted) {
-      // this.hide();
+      this.hide();
     }
 
     if (Object.values(this.state.selectedData).includes(value)) {
