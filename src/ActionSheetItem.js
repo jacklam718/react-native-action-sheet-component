@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
   },
   itemContent: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
@@ -57,15 +59,21 @@ const defaultProps = {
 
 function ActionSheetItem({ text, value, index, onPress, style, icon, selectedIcon, selected }: Props) {
   let iconOnSelected;
+  let itemIcon;
+
   if (selected) {
-    iconOnSelected = (
-      <Image source={selectedIcon} style={styles.selectedIcon} />
-    );
+    if (['number', 'string'].includes(typeof selectedIcon)) {
+      iconOnSelected = <Image source={selectedIcon} style={styles.selectedIcon} />;
+    } else {
+      iconOnSelected = selectedIcon;
+    }
   }
 
-  const itemIcon = icon ? (
-    <Image source={icon} style={styles.itemIcon} />
-  ) : null;
+  if (['number', 'string'].includes(typeof icon)) {
+    itemIcon = <Image source={icon} style={styles.itemIcon} />;
+  } else {
+    itemIcon = icon;
+  }
 
   return (
     <TouchableHighlight
@@ -81,7 +89,7 @@ function ActionSheetItem({ text, value, index, onPress, style, icon, selectedIco
             {text}
           </Text>
         </View>
-        <View>
+        <View style={styles.itemContent}>
           {iconOnSelected}
         </View>
       </View>
