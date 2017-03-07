@@ -6,6 +6,7 @@ Pull request are welcomed. Please follow the Airbnb style guide [Airbnb JavaScri
 #### Preview
 
 <img src="https://raw.githubusercontent.com/jacklam718/react-native-action-sheet-component/master/.github/action-sheet.gif" width="300">
+<img src="https://raw.githubusercontent.com/jacklam718/react-native-action-sheet-component/master/.github/action-sheet.png" width="300">
 
 
 ## Installation
