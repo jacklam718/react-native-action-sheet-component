@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Children, cloneElement, type ReactElement } from 'react';
-import { View, Animated, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Animated, StyleSheet, ScrollView, Dimensions, BackAndroid } from 'react-native';
 import AnimatedOverlay from 'react-native-animated-overlay';
 import _ from 'lodash';
 
@@ -17,10 +17,11 @@ const ACTION_SHEET_CLOSING: string = 'closing';
 const ACTION_SHEET_CLOSED: string = 'closed';
 
 const DEFAULT_ANIMATION_DURATION: number = 250;
-
 const INITIAL_TOP_POSITION: number = -180;
 const INITIAL_BOTTOM_POSITION: number = HEIGHT * -1;
 
+// events
+const HARDWARE_BACK_PRESS_EVENT: string = 'hardwareBackPress';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,6 +58,7 @@ type Props = {
   value?: any;
   defaultValue?: any;
   hideOnSelceted?: boolean;
+  hideOnHardwareBackPress?: boolean;
   children?: any;
 };
 
@@ -73,6 +75,7 @@ const defaultProps = {
   value: null,
   defaultValue: null,
   hideOnSelceted: true,
+  hideOnHardwareBackPress: true,
   children: null,
 };
 
@@ -101,6 +104,8 @@ class ActionSheet extends Component {
     if (this.props.show) {
       this.show();
     }
+
+    BackAndroid.addEventListener(HARDWARE_BACK_PRESS_EVENT, this.hardwareBackPressHandler);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -116,7 +121,6 @@ class ActionSheet extends Component {
       }
     }
 
-
     if (!_.isEqual(this.props.value, nextProps.value)) {
       const selectedData = [];
       nextProps.value.forEach((value) => {
@@ -129,7 +133,11 @@ class ActionSheet extends Component {
     }
   }
 
-  get showActionSheetPosition(): string {
+  componentWillUnmount() {
+    BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
+  }
+
+  get showActionSheetPosition(): number {
     const { position } = this.props;
     if (position === 'top') {
       return INITIAL_TOP_POSITION * -1;
@@ -137,7 +145,7 @@ class ActionSheet extends Component {
     return 0;
   }
 
-  get hideActionSheetPosition(): string {
+  get hideActionSheetPosition(): number {
     const { position } = this.props;
     if (position === 'top') {
       return INITIAL_TOP_POSITION;
@@ -166,6 +174,17 @@ class ActionSheet extends Component {
     });
   }
 
+  hardwareBackPressHandler = (): boolean => {
+    const { hideOnHardwareBackPress } = this.props;
+
+    if (hideOnHardwareBackPress && this.state.show) {
+      this.hide();
+      return true;
+    }
+
+    return false;
+  }
+
   show = (callback?: Function = () => {}): void => {
     if ([ACTION_SHEET_OPENING, ACTION_SHEET_OPENED].includes(this.state.actionSheetState)) {
       return;
@@ -192,7 +211,7 @@ class ActionSheet extends Component {
     callback();
   }
 
-  onItemPress(value, index): void {
+  onItemPress = (value, index): void => {
     const { hideOnSelceted } = this.props;
     if (hideOnSelceted) {
       this.hide();
@@ -232,27 +251,24 @@ class ActionSheet extends Component {
     onChange(value, index, selectedData);
   }
 
-  isItemSelected(index): boolean {
-    return !!this.state.selectedData[index];
-  }
-
   renderItems(): ReactElement {
     const { children, showSparator } = this.props;
 
-    return Children.map(children, (child, i) => {
+    return Children.map(children, (child, childIndex) => {
       let separator = null;
-      const index = this.state.selectedData.indexOf(child.value);
+      const selectedIndex = this.state.selectedData.indexOf(child.props.value);
 
-      if (showSparator && i < children.length - 1) {
+      // don't show parator for last action sheet item. just because more beautiful.
+      if (showSparator && childIndex < children.length - 1) {
         separator = <Separator />;
       }
 
       const item = cloneElement(child, {
-        index,
+        index: selectedIndex,
         selected: this.state.selectedData.includes(child.props.value),
-        onPress: (selectedValue, selectedIndex) => {
-          child.props.onPress(selectedValue, selectedIndex);
-          this.onItemPress(selectedValue, selectedIndex);
+        onPress: (_selectedValue, _selectedIndex) => {
+          child.props.onPress(_selectedValue, _selectedIndex);
+          this.onItemPress(_selectedValue, _selectedIndex);
         },
       });
 
