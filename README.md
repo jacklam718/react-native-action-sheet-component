@@ -90,22 +90,23 @@ actionSheet.hide(() => {
 |---|---|---|---|
 | `value?` | `any` | `null` | | |
 | `defaultValue?` | `any` | `null` | | |
-| `onShow` | `Function` | () => {} | |
-| `onHide` | `Function` | () => {} | |
-| `onChange` | `Function` | () => {} | |
-| `show` | `boolean` | `false` | |
-| `multiple` | `boolean` | `false` | |
-| `hideOnSelceted` | `boolean` | `true` | |
-| `showSparator` | `boolean` | `true` | |
-| `animationDuration` | `number` | `250` | |
-| `overlayOpacity` | `number` | `0.3` | |
-| `position` | `string` | `top` | |
-| `children` | `any` | `null` | |
+| `onShow?` | `Function` | () => {} | |
+| `onHide?` | `Function` | () => {} | |
+| `onChange?` | `Function` | () => {} | |
+| `show?` | `boolean` | `false` | |
+| `multiple?` | `boolean` | `false` | |
+| `hideOnSelceted?` | `boolean` | `true` | |
+| `hideOnHardwareBackPress?` | `boolean` | `true` | |
+| `showSparator?` | `boolean` | `true` | |
+| `animationDuration?` | `number` | `250` | |
+| `overlayOpacity?` | `number` | `0.3` | |
+| `position?` | `string` | `top` | |
+| `children?` | `any` | `null` | |
 
 ### ActionSheetItem
 | Prop | Type | Default | Note |
 |---|---|---|---|
-| `text?` | `any` | `null` | | |
+| `text` | `any` | `null` | | |
 | `icon?` | `any` | `null` | | |
 | `index?` | `number` | `null` | | |
 | `selectedIcon?` | `number` | ` require('./img/checkmark.png')` | | |
