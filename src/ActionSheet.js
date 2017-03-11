@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Children, cloneElement, type ReactElement } from 'react';
-import { View, Animated, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Animated, StyleSheet, ScrollView, Dimensions, BackAndroid } from 'react-native';
 import AnimatedOverlay from 'react-native-animated-overlay';
 import _ from 'lodash';
 
@@ -17,10 +17,11 @@ const ACTION_SHEET_CLOSING: string = 'closing';
 const ACTION_SHEET_CLOSED: string = 'closed';
 
 const DEFAULT_ANIMATION_DURATION: number = 250;
-
 const INITIAL_TOP_POSITION: number = -180;
 const INITIAL_BOTTOM_POSITION: number = HEIGHT * -1;
 
+// events
+const HARDWARE_BACK_PRESS_EVENT: string = 'hardwareBackPress';
 
 const styles = StyleSheet.create({
   container: {
@@ -51,12 +52,14 @@ type Props = {
   animationDuration?: number;
   overlayOpacity?: number;
   position?: 'top' | 'bottom';
+  style?: any;
   onChange?: () => void;
   multiple?: boolean;
   showSparator?: boolean;
   value?: any;
   defaultValue?: any;
   hideOnSelceted?: boolean;
+  hideOnHardwareBackPress?: boolean;
   children?: any;
 };
 
@@ -67,12 +70,14 @@ const defaultProps = {
   animationDuration: DEFAULT_ANIMATION_DURATION,
   overlayOpacity: 0.3,
   position: 'top',
+  style: null,
   onChange: () => {},
   multiple: false,
   showSparator: true,
   value: null,
   defaultValue: null,
   hideOnSelceted: true,
+  hideOnHardwareBackPress: true,
   children: null,
 };
 
@@ -101,6 +106,8 @@ class ActionSheet extends Component {
     if (this.props.show) {
       this.show();
     }
+
+    BackAndroid.addEventListener(HARDWARE_BACK_PRESS_EVENT, this.hardwareBackPressHandler);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -116,8 +123,7 @@ class ActionSheet extends Component {
       }
     }
 
-
-    if (!_.isEqual(this.props.value, nextProps.value)) {
+    if (nextProps.value && !_.isEqual(this.props.value, nextProps.value)) {
       const selectedData = [];
       nextProps.value.forEach((value) => {
         if (!this.props.multiple && selectedData.length !== 0) {
@@ -129,7 +135,12 @@ class ActionSheet extends Component {
     }
   }
 
-  get showActionSheetPosition(): string {
+  componentWillUnmount() {
+    BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
+    this.hide();
+  }
+
+  get showActionSheetPosition(): number {
     const { position } = this.props;
     if (position === 'top') {
       return INITIAL_TOP_POSITION * -1;
@@ -137,7 +148,7 @@ class ActionSheet extends Component {
     return 0;
   }
 
-  get hideActionSheetPosition(): string {
+  get hideActionSheetPosition(): number {
     const { position } = this.props;
     if (position === 'top') {
       return INITIAL_TOP_POSITION;
@@ -146,7 +157,9 @@ class ActionSheet extends Component {
   }
 
   onOverlayPress = (): void => {
-    this.hide();
+    if (this.state.actionSheetState === ACTION_SHEET_OPENED) {
+      this.hide();
+    }
   }
 
   setActionSheetState(toValue: number, callback?: Function = () => {}): void {
@@ -166,6 +179,17 @@ class ActionSheet extends Component {
     });
   }
 
+  hardwareBackPressHandler = (): boolean => {
+    const { hideOnHardwareBackPress } = this.props;
+
+    if (hideOnHardwareBackPress && this.state.show) {
+      this.hide();
+      return true;
+    }
+
+    return false;
+  }
+
   show = (callback?: Function = () => {}): void => {
     if ([ACTION_SHEET_OPENING, ACTION_SHEET_OPENED].includes(this.state.actionSheetState)) {
       return;
@@ -174,9 +198,10 @@ class ActionSheet extends Component {
     const { onShow } = this.props;
 
     this.setState({ show: true });
-    this.setActionSheetState(this.showActionSheetPosition);
-    onShow();
-    callback();
+    this.setActionSheetState(this.showActionSheetPosition, () => {
+      onShow();
+      callback();
+    });
   }
 
   hide = (callback?: Function = () => {}): void => {
@@ -187,12 +212,13 @@ class ActionSheet extends Component {
     const { onHide } = this.props;
 
     this.setState({ show: false });
-    this.setActionSheetState(this.hideActionSheetPosition);
-    onHide();
-    callback();
+    this.setActionSheetState(this.hideActionSheetPosition, () => {
+      onHide();
+      callback();
+    });
   }
 
-  onItemPress(value, index): void {
+  onItemPress = (value, index): void => {
     const { hideOnSelceted } = this.props;
     if (hideOnSelceted) {
       this.hide();
@@ -232,27 +258,24 @@ class ActionSheet extends Component {
     onChange(value, index, selectedData);
   }
 
-  isItemSelected(index): boolean {
-    return !!this.state.selectedData[index];
-  }
-
   renderItems(): ReactElement {
     const { children, showSparator } = this.props;
 
-    return Children.map(children, (child, i) => {
+    return Children.map(children, (child, childIndex) => {
       let separator = null;
-      const index = this.state.selectedData.indexOf(child.value);
+      const selectedIndex = this.state.selectedData.indexOf(child.props.value);
 
-      if (showSparator && i < children.length - 1) {
+      // don't show parator for last action sheet item. just because more beautiful.
+      if (showSparator && childIndex < children.length - 1) {
         separator = <Separator />;
       }
 
       const item = cloneElement(child, {
-        index,
+        index: selectedIndex,
         selected: this.state.selectedData.includes(child.props.value),
-        onPress: (selectedValue, selectedIndex) => {
-          child.props.onPress(selectedValue, selectedIndex);
-          this.onItemPress(selectedValue, selectedIndex);
+        onPress: (_selectedValue, _selectedIndex) => {
+          child.props.onPress(_selectedValue, _selectedIndex);
+          this.onItemPress(_selectedValue, _selectedIndex);
         },
       });
 
@@ -266,12 +289,16 @@ class ActionSheet extends Component {
   }
 
   render() {
-    const { animationDuration, overlayOpacity, position } = this.props;
+    const { animationDuration, overlayOpacity, position, style } = this.props;
     const { actionSheetState, actionSheetAnimation: { animations } } = this.state;
 
-    const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
-    const pointerEvents = (actionSheetState === ACTION_SHEET_OPENED) ? 'auto' : 'none';
-    const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
+    let overlayShow = false;
+    let pointerEvents = 'none';
+
+    if ([ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState)) {
+      overlayShow = true;
+      pointerEvents = 'auto';
+    }
 
     const actionSheetPosition = (position === 'top')
       ? { top: INITIAL_TOP_POSITION }
@@ -282,7 +309,7 @@ class ActionSheet extends Component {
       : null;
 
     return (
-      <View style={[styles.container, hidden]}>
+      <View style={[styles.container]}>
         <AnimatedOverlay
           onPress={this.onOverlayPress}
           overlayShow={overlayShow}
@@ -291,7 +318,7 @@ class ActionSheet extends Component {
           pointerEvents={pointerEvents}
         />
         <Animated.View
-          style={[styles.contentContainer, actionSheetPosition, animations]}
+          style={[styles.contentContainer, actionSheetPosition, style, animations]}
         >
           <ScrollView style={[styles.scrollView, scrollView]}>
             {this.renderItems()}
