@@ -123,7 +123,7 @@ class ActionSheet extends Component {
       }
     }
 
-    if (!_.isEqual(this.props.value, nextProps.value)) {
+    if (nextProps.value && !_.isEqual(this.props.value, nextProps.value)) {
       const selectedData = [];
       nextProps.value.forEach((value) => {
         if (!this.props.multiple && selectedData.length !== 0) {
@@ -137,6 +137,7 @@ class ActionSheet extends Component {
 
   componentWillUnmount() {
     BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
+    this.hide();
   }
 
   get showActionSheetPosition(): number {
@@ -156,7 +157,9 @@ class ActionSheet extends Component {
   }
 
   onOverlayPress = (): void => {
-    this.hide();
+    if (this.state.actionSheetState === ACTION_SHEET_OPENED) {
+      this.hide();
+    }
   }
 
   setActionSheetState(toValue: number, callback?: Function = () => {}): void {
@@ -195,9 +198,10 @@ class ActionSheet extends Component {
     const { onShow } = this.props;
 
     this.setState({ show: true });
-    this.setActionSheetState(this.showActionSheetPosition);
-    onShow();
-    callback();
+    this.setActionSheetState(this.showActionSheetPosition, () => {
+      onShow();
+      callback();
+    });
   }
 
   hide = (callback?: Function = () => {}): void => {
@@ -208,9 +212,10 @@ class ActionSheet extends Component {
     const { onHide } = this.props;
 
     this.setState({ show: false });
-    this.setActionSheetState(this.hideActionSheetPosition);
-    onHide();
-    callback();
+    this.setActionSheetState(this.hideActionSheetPosition, () => {
+      onHide();
+      callback();
+    });
   }
 
   onItemPress = (value, index): void => {
@@ -287,8 +292,14 @@ class ActionSheet extends Component {
     const { animationDuration, overlayOpacity, position, style } = this.props;
     const { actionSheetState, actionSheetAnimation: { animations } } = this.state;
 
-    const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
-    const pointerEvents = (actionSheetState === ACTION_SHEET_OPENED) ? 'auto' : 'none';
+    let overlayShow = false;
+    let pointerEvents = 'none';
+
+    if ([ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState)) {
+      overlayShow = true;
+      pointerEvents = 'auto';
+    }
+
     const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
 
     const actionSheetPosition = (position === 'top')
