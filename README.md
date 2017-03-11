@@ -90,9 +90,10 @@ actionSheet.hide(() => {
 |---|---|---|---|
 | `value?` | `any` | `null` | | |
 | `defaultValue?` | `any` | `null` | | |
-| `onShow?` | `Function` | () => {} | |
-| `onHide?` | `Function` | () => {} | |
-| `onChange?` | `Function` | () => {} | |
+| `onShow?` | `Function` | `() => {}` | |
+| `onHide?` | `Function` | `() => {}` | |
+| `style?` | `any` | `null` | |
+| `onChange?` | `Function` | `() => {}` | |
 | `show?` | `boolean` | `false` | |
 | `multiple?` | `boolean` | `false` | |
 | `hideOnSelceted?` | `boolean` | `true` | |

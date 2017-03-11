@@ -52,6 +52,7 @@ type Props = {
   animationDuration?: number;
   overlayOpacity?: number;
   position?: 'top' | 'bottom';
+  style?: any;
   onChange?: () => void;
   multiple?: boolean;
   showSparator?: boolean;
@@ -69,6 +70,7 @@ const defaultProps = {
   animationDuration: DEFAULT_ANIMATION_DURATION,
   overlayOpacity: 0.3,
   position: 'top',
+  style: null,
   onChange: () => {},
   multiple: false,
   showSparator: true,
@@ -282,7 +284,7 @@ class ActionSheet extends Component {
   }
 
   render() {
-    const { animationDuration, overlayOpacity, position } = this.props;
+    const { animationDuration, overlayOpacity, position, style } = this.props;
     const { actionSheetState, actionSheetAnimation: { animations } } = this.state;
 
     const overlayShow = [ACTION_SHEET_OPENED, ACTION_SHEET_OPENING].includes(actionSheetState);
@@ -307,7 +309,7 @@ class ActionSheet extends Component {
           pointerEvents={pointerEvents}
         />
         <Animated.View
-          style={[styles.contentContainer, actionSheetPosition, animations]}
+          style={[styles.contentContainer, actionSheetPosition, style, animations]}
         >
           <ScrollView style={[styles.scrollView, scrollView]}>
             {this.renderItems()}
