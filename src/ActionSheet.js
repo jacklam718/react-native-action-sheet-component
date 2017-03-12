@@ -8,8 +8,6 @@ import _ from 'lodash';
 import Separator from './Separator';
 import Animation from './Animation';
 
-const { width: WIDTH } = Dimensions.get('window');
-
 // action sheet states
 const ACTION_SHEET_OPENING: string = 'opening';
 const ACTION_SHEET_OPENED: string = 'opened';
@@ -31,7 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   contentContainer: {
-    width: WIDTH,
     position: 'absolute',
     backgroundColor: 'white',
   },
@@ -63,7 +60,7 @@ const defaultProps = {
   show: false,
   animationDuration: DEFAULT_ANIMATION_DURATION,
   overlayOpacity: 0.3,
-  position: 'top',
+  position: 'bottom',
   style: null,
   onChange: () => {},
   multiple: false,
@@ -282,6 +279,7 @@ class ActionSheet extends Component {
       pointerEvents = 'auto';
     }
 
+    const width = { width: Dimensions.get('window').width };
     const actionSheetPosition = (position === 'top')
       ? { top: animations.position }
       : { bottom: animations.position };
@@ -300,7 +298,7 @@ class ActionSheet extends Component {
           pointerEvents={pointerEvents}
         />
         <Animated.View
-          style={[styles.contentContainer, style, actionSheetPosition]}
+          style={[styles.contentContainer, style, width, actionSheetPosition]}
           onLayout={this.getActionSheetHeight}
         >
           <ScrollView style={[styles.scrollView, scrollView]}>
