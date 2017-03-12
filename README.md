@@ -17,10 +17,71 @@ Pull request are welcomed. Please follow the Airbnb style guide [Airbnb JavaScri
 `npm install --save react-native-action-sheet-component`
 
 
+## Usage with `ActionSheetManager`
+```javascript
+import { EvilIcons, Ionicons } from '@exponent/vector-icons';
+import ActionSheetManager { ActionSheet, ActionSheetItem } from 'react-native-action-sheet-component';
+```
+
+##### Options
+```javascript
+const actionSheetItems = [
+  <ActionSheetItem
+    key='item-1'
+    text="Github"
+    value="github"
+    selectedIcon={checkedIcon}
+    icon={
+      <EvilIcons name="sc-github" size={42} />
+    }
+    onPress={this.onItemPress}
+  />,
+  <ActionSheetItem
+    key='item-2'
+    text="Facebook"
+    value="facebook"
+    selectedIcon={checkedIcon}
+    icon={
+      <EvilIcons name="sc-facebook" color="#4363A2" size={42} />
+    }
+    onPress={this.onItemPress}
+  />,
+];
+
+const options = {
+  defaultValue: ['github'],
+  content: actionSheetItems,
+  onChange: (value, index, selectedData) => {
+  },
+}
+```
+
+##### Show
+```javascript
+ActionSheetManager.show(options, () => {
+  console.log('callback');
+});
+```
+
+##### Update
+```javascript
+ActionSheetManager.update(options, () => {
+  console.log('callback');
+});
+```
+
+##### Hide
+```javascript
+ActionSheetManager.hide(() => {
+  console.log('callback');
+});
+```
+
+
 ## Usage with `ActionSheet`
 ```javascript
 import { EvilIcons, Ionicons } from '@exponent/vector-icons';
-import ActionSheet, { ActionSheetItem } from 'react-native-action-sheet-component';
+import { ActionSheet, ActionSheetItem } from 'react-native-action-sheet-component';
 ```
 
 ```javascript

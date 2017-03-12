@@ -301,7 +301,6 @@ class ActionSheet extends Component {
     }
 
     const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
-
     const actionSheetPosition = (position === 'top')
       ? { top: INITIAL_TOP_POSITION }
       : { bottom: INITIAL_BOTTOM_POSITION };
@@ -311,7 +310,7 @@ class ActionSheet extends Component {
       : null;
 
     return (
-      <View style={[styles.container, hidden]}>
+      <View style={[styles.container]}>
         <AnimatedOverlay
           onPress={this.onOverlayPress}
           overlayShow={overlayShow}
