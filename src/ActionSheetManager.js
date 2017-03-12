@@ -15,9 +15,7 @@ export default class ActionSheetManager {
     }
 
     this.currentActionSheet = new RootSiblings(
-      <ActionSheet {...props}>,
-        {props.content}
-      </ActionSheet>,
+      <ActionSheet {...props} />,
       callback,
     );
   }
@@ -30,9 +28,7 @@ export default class ActionSheetManager {
   update = (props: Object, callback?: Function = () => {}): void => {
     this.props[this.props.length - 1] = props;
     this.currentActionSheet.update(
-      <ActionSheet {...props}>
-        {props.content}
-      </ActionSheet>,
+      <ActionSheet {...props} />,
       callback,
     );
   }
