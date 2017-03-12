@@ -4,7 +4,6 @@ import { Animated, Easing } from 'react-native';
 
 export default class Animation {
   constructor(toValue: number) {
-    this.opacity = new Animated.Value(toValue);
     this.position = new Animated.Value(toValue);
   }
 
