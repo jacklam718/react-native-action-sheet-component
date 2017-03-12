@@ -50,7 +50,7 @@ const actionSheetItems = [
 
 const options = {
   defaultValue: ['github'],
-  content: actionSheetItems,
+  children: actionSheetItems,
   onChange: (value, index, selectedData) => {
   },
 }
