@@ -14,7 +14,12 @@ export default class ActionSheetManager {
       return;
     }
 
-    this.currentActionSheet = new RootSiblings(<ActionSheet {...props} />, callback);
+    this.currentActionSheet = new RootSiblings(
+      <ActionSheet {...props}>,
+        {props.content}
+      </ActionSheet>,
+      callback,
+    );
   }
 
   create(props: Object, callback?: Function = () => {}): void {
@@ -24,7 +29,12 @@ export default class ActionSheetManager {
 
   update = (props: Object, callback?: Function = () => {}): void => {
     this.props[this.props.length - 1] = props;
-    this.currentActionSheet.update(<ActionSheet {...props} />, callback);
+    this.currentActionSheet.update(
+      <ActionSheet {...props}>
+        {props.content}
+      </ActionSheet>,
+      callback,
+    );
   }
 
   show = (options: Object, callback?: Function = () => {}): void => {
