@@ -4,20 +4,20 @@ import { Animated, Easing } from 'react-native';
 
 export default class Animation {
   constructor(toValue: number) {
-    this.transformOffsetY = new Animated.Value(toValue);
+    this.opacity = new Animated.Value(toValue);
+    this.position = new Animated.Value(toValue);
   }
 
   toValue(toValue: number, duration: number, onFinished?: Function = () => {}): void {
-    Animated.timing(this.transformOffsetY, {
+    Animated.timing(this.position, {
       toValue,
       duration,
       easing: Easing.inOut(Easing.quad),
-    }).start(onFinished);
+    })
+    .start(onFinished);
   }
 
   get animations(): Object {
-    return {
-      transform: [{ translateY: this.transformOffsetY }],
-    };
+    return { position: this.position };
   }
 }

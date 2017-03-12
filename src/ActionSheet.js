@@ -8,7 +8,7 @@ import _ from 'lodash';
 import Separator from './Separator';
 import Animation from './Animation';
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
+const { width: WIDTH } = Dimensions.get('window');
 
 // action sheet states
 const ACTION_SHEET_OPENING: string = 'opening';
@@ -16,9 +16,8 @@ const ACTION_SHEET_OPENED: string = 'opened';
 const ACTION_SHEET_CLOSING: string = 'closing';
 const ACTION_SHEET_CLOSED: string = 'closed';
 
-const DEFAULT_ANIMATION_DURATION: number = 250;
-const INITIAL_TOP_POSITION: number = -180;
-const INITIAL_BOTTOM_POSITION: number = HEIGHT * -1;
+const DEFAULT_ANIMATION_DURATION: number = 180;
+const INITIAL_POSITION: number = -180;
 
 // events
 const HARDWARE_BACK_PRESS_EVENT: string = 'hardwareBackPress';
@@ -27,6 +26,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
+    bottom: 0,
     left: 0,
     backgroundColor: 'white',
   },
@@ -36,12 +36,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   scrollView: {
-  },
-  hidden: {
-    top: -10000,
-    left: 0,
-    height: 0,
-    width: 0,
   },
 });
 
@@ -98,7 +92,8 @@ class ActionSheet extends Component {
       show: props.show,
       selectedData: initValue,
       actionSheetState: ACTION_SHEET_CLOSED,
-      actionSheetAnimation: new Animation(this.hideActionSheetPosition),
+      actionSheetAnimation: new Animation(INITIAL_POSITION),
+      actionSheetHeight: 0,
     };
   }
 
@@ -111,10 +106,6 @@ class ActionSheet extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.position !== nextProps.position) {
-      this.setState({ actionSheetAnimation: new Animation(this.hideActionSheetPosition) });
-    }
-
     if (this.props.show !== nextProps.show) {
       if (nextProps.show) {
         this.show();
@@ -138,22 +129,6 @@ class ActionSheet extends Component {
   componentWillUnmount() {
     BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
     this.hide();
-  }
-
-  get showActionSheetPosition(): number {
-    const { position } = this.props;
-    if (position === 'top') {
-      return INITIAL_TOP_POSITION * -1;
-    }
-    return 0;
-  }
-
-  get hideActionSheetPosition(): number {
-    const { position } = this.props;
-    if (position === 'top') {
-      return INITIAL_TOP_POSITION;
-    }
-    return INITIAL_BOTTOM_POSITION * -1;
   }
 
   onOverlayPress = (): void => {
@@ -190,6 +165,13 @@ class ActionSheet extends Component {
     return false;
   }
 
+  getActionSheetHeight = (e: any): void => {
+    const height = e.nativeEvent.layout.height;
+    if (height && height !== this.state.actionSheetHeight) {
+      this.setState({ actionSheetHeight: height });
+    }
+  }
+
   show = (callback?: Function = () => {}): void => {
     if ([ACTION_SHEET_OPENING, ACTION_SHEET_OPENED].includes(this.state.actionSheetState)) {
       return;
@@ -198,7 +180,7 @@ class ActionSheet extends Component {
     const { onShow } = this.props;
 
     this.setState({ show: true });
-    this.setActionSheetState(this.showActionSheetPosition, () => {
+    this.setActionSheetState(0, () => {
       onShow();
       callback();
     });
@@ -212,7 +194,7 @@ class ActionSheet extends Component {
     const { onHide } = this.props;
 
     this.setState({ show: false });
-    this.setActionSheetState(this.hideActionSheetPosition, () => {
+    this.setActionSheetState((0 - this.state.actionSheetHeight), () => {
       onHide();
       callback();
     });
@@ -300,10 +282,9 @@ class ActionSheet extends Component {
       pointerEvents = 'auto';
     }
 
-    const hidden = actionSheetState === ACTION_SHEET_CLOSED && styles.hidden;
     const actionSheetPosition = (position === 'top')
-      ? { top: INITIAL_TOP_POSITION }
-      : { bottom: INITIAL_BOTTOM_POSITION };
+      ? { top: animations.position }
+      : { bottom: animations.position };
 
     const scrollView = (position === 'top')
       ? { paddingTop: 30 }
@@ -319,7 +300,8 @@ class ActionSheet extends Component {
           pointerEvents={pointerEvents}
         />
         <Animated.View
-          style={[styles.contentContainer, actionSheetPosition, style, animations]}
+          style={[styles.contentContainer, style, actionSheetPosition]}
+          onLayout={this.getActionSheetHeight}
         >
           <ScrollView style={[styles.scrollView, scrollView]}>
             {this.renderItems()}
