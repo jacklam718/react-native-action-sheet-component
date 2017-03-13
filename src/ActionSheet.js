@@ -240,12 +240,11 @@ class ActionSheet extends Component {
   renderItems(): ReactElement {
     const { children, showSparator } = this.props;
 
-    return Children.map(children, (child, childIndex) => {
-      let separator = null;
+    return Children.map(children, (child) => {
+      let separator;
       const selectedIndex = this.state.selectedData.indexOf(child.props.value);
 
-      // don't show parator for last action sheet item. just because more beautiful.
-      if (showSparator && childIndex < children.length - 1) {
+      if (showSparator) {
         separator = <Separator />;
       }
 
