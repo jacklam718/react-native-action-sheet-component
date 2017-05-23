@@ -1,4 +1,4 @@
-import Exponent from 'exponent';
+import Expo from 'expo';
 import ActionSheetExample from './ActionSheetExample';
 
-Exponent.registerRootComponent(ActionSheetExample);
+Expo.registerRootComponent(ActionSheetExample);

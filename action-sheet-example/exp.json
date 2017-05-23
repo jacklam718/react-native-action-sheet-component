@@ -3,13 +3,13 @@
   "description": "An empty new project",
   "slug": "action-sheet-example",
   "privacy": "public",
-  "sdkVersion": "14.0.0",
+  "sdkVersion": "17.0.0",
   "version": "1.0.0",
   "orientation": "portrait",
   "primaryColor": "#cccccc",
-  "icon": "https://s3.amazonaws.com/exp-brand-assets/ExponentEmptyManifest_192.png",
+  "icon": "./assets/icons/app.png",
   "loading": {
-    "icon": "https://s3.amazonaws.com/exp-brand-assets/ExponentEmptyManifest_192.png",
+    "icon": "./assets/icons/loading.png",
     "hideExponentText": false
   },
   "packagerOpts": {

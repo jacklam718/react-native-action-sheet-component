@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { EvilIcons, Ionicons } from '@exponent/vector-icons';
+import { EvilIcons, Ionicons } from '@expo/vector-icons';
 import ActionSheet, { ActionSheetItem } from 'react-native-action-sheet-component';
 
 const styles = StyleSheet.create({

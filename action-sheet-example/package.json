@@ -1,15 +1,14 @@
 {
   "name": "action-sheet-example",
   "version": "0.0.0",
-  "description": "Hello Exponent!",
+  "description": "Hello Expo!",
   "author": null,
   "private": true,
   "main": "main.js",
   "dependencies": {
-    "@exponent/vector-icons": "~4.0.0",
-    "exponent": "^14.0.0",
-    "react": "~15.4.0",
-    "react-native": "https://github.com/exponent/react-native/archive/sdk-14.0.0.tar.gz",
-    "react-native-action-sheet-component": ".."
+    "expo": "17.0.0",
+    "react": "16.0.0-alpha.6",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-17.0.0.tar.gz",
+    "react-native-action-sheet-component": "file:///Users/jack/workspace/react-native-action-sheet-component"
   }
 }
