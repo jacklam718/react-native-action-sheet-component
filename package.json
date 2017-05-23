@@ -8,11 +8,12 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && babel src/ -d dist/"
+    "build": "npm run clean && babel src/ -d dist/ && copyfiles -f src/img/* dist/img"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "babel-plugin-flow-react-proptypes": "^2.1.3",
+    "copyfiles": "^1.2.0",
     "eslint": "^3.17.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
