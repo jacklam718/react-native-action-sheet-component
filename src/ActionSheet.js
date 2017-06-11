@@ -270,7 +270,7 @@ class ActionSheet extends Component {
   }
 
   renderItems(): ReactElement {
-    const { children, showSparator } = this.props;
+    const { children, showSparator, showSelectedIcon } = this.props;
 
     return Children.map(children, (child) => {
       let separator;
@@ -282,6 +282,7 @@ class ActionSheet extends Component {
 
       const item = cloneElement(child, {
         index: selectedIndex,
+        showSelectedIcon,
         selected: this.state.selectedData.includes(child.props.value),
         onPress: (_selectedValue, _selectedIndex) => {
           child.props.onPress(_selectedValue, _selectedIndex);

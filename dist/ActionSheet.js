@@ -270,7 +270,7 @@ onChange(value,index,selectedData);
 }},{key:'renderItems',value:function renderItems()
 
 {var _this4=this;var _props3=
-this.props,children=_props3.children,showSparator=_props3.showSparator;
+this.props,children=_props3.children,showSparator=_props3.showSparator,showSelectedIcon=_props3.showSelectedIcon;
 
 return _react.Children.map(children,function(child){
 var separator=void 0;
@@ -282,6 +282,7 @@ separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:
 
 var item=(0,_react.cloneElement)(child,{
 index:selectedIndex,
+showSelectedIcon:showSelectedIcon,
 selected:_this4.state.selectedData.includes(child.props.value),
 onPress:function onPress(_selectedValue,_selectedIndex){
 child.props.onPress(_selectedValue,_selectedIndex);
@@ -290,7 +291,7 @@ _this4.onItemPress(_selectedValue,_selectedIndex);
 
 
 return(
-_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:293}},
+_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:294}},
 item,
 separator));
 
@@ -322,14 +323,14 @@ styles.containerTop:
 styles.containerBottom;
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:325}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:326}},
 _react2.default.createElement(_reactNativeAnimatedOverlay2.default,{
 onPress:this.onOverlayPress,
 overlayShow:overlayShow,
 duration:animationDuration,
 opacity:overlayOpacity,
 pointerEvents:pointerEvents,
-useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:326}}),
+useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:327}}),
 
 _react2.default.createElement(_reactNative.Animated.View,{
 style:[
@@ -340,9 +341,9 @@ width,
 transform:[{translateY:transformOffsetY}]}],
 
 
-onLayout:this.getActionSheetHeight,__source:{fileName:_jsxFileName,lineNumber:334}},
+onLayout:this.getActionSheetHeight,__source:{fileName:_jsxFileName,lineNumber:335}},
 
-_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView],__source:{fileName:_jsxFileName,lineNumber:345}},
+_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView],__source:{fileName:_jsxFileName,lineNumber:346}},
 this.renderItems()))));
 
 
