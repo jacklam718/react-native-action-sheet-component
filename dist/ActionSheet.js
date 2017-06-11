@@ -71,6 +71,7 @@ scrollView:{}});
 
 
 
+
 var defaultProps={
 onShow:function onShow(){},
 onHide:function onHide(){},
@@ -82,6 +83,7 @@ style:null,
 onChange:function onChange(){},
 multiple:false,
 showSparator:true,
+showSelectedIcon:true,
 value:null,
 defaultValue:null,
 hideOnSelceted:true,
@@ -275,7 +277,7 @@ var separator=void 0;
 var selectedIndex=_this4.state.selectedData.indexOf(child.props.value);
 
 if(showSparator){
-separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:278}});
+separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:280}});
 }
 
 var item=(0,_react.cloneElement)(child,{
@@ -288,7 +290,7 @@ _this4.onItemPress(_selectedValue,_selectedIndex);
 
 
 return(
-_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:291}},
+_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:293}},
 item,
 separator));
 
@@ -320,14 +322,14 @@ styles.containerTop:
 styles.containerBottom;
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:323}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:325}},
 _react2.default.createElement(_reactNativeAnimatedOverlay2.default,{
 onPress:this.onOverlayPress,
 overlayShow:overlayShow,
 duration:animationDuration,
 opacity:overlayOpacity,
 pointerEvents:pointerEvents,
-useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:324}}),
+useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:326}}),
 
 _react2.default.createElement(_reactNative.Animated.View,{
 style:[
@@ -338,15 +340,15 @@ width,
 transform:[{translateY:transformOffsetY}]}],
 
 
-onLayout:this.getActionSheetHeight,__source:{fileName:_jsxFileName,lineNumber:332}},
+onLayout:this.getActionSheetHeight,__source:{fileName:_jsxFileName,lineNumber:334}},
 
-_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView],__source:{fileName:_jsxFileName,lineNumber:343}},
+_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView],__source:{fileName:_jsxFileName,lineNumber:345}},
 this.renderItems()))));
 
 
 
 
-}}]);return ActionSheet;}(_react.Component);ActionSheet.defaultProps=defaultProps;ActionSheet.propTypes={onShow:require('prop-types').func,onHide:require('prop-types').func,show:require('prop-types').bool,animationDuration:require('prop-types').number,overlayOpacity:require('prop-types').number,position:require('prop-types').oneOf(['top','bottom']),style:require('prop-types').any,onChange:require('prop-types').func,multiple:require('prop-types').bool,showSparator:require('prop-types').bool,value:require('prop-types').any,defaultValue:require('prop-types').any,hideOnSelceted:require('prop-types').bool,hideOnHardwareBackPress:require('prop-types').bool,children:require('prop-types').any};exports.default=
+}}]);return ActionSheet;}(_react.Component);ActionSheet.defaultProps=defaultProps;ActionSheet.propTypes={onShow:require('prop-types').func,onHide:require('prop-types').func,show:require('prop-types').bool,animationDuration:require('prop-types').number,overlayOpacity:require('prop-types').number,position:require('prop-types').oneOf(['top','bottom']),style:require('prop-types').any,onChange:require('prop-types').func,multiple:require('prop-types').bool,showSparator:require('prop-types').bool,showSelectedIcon:require('prop-types').bool,value:require('prop-types').any,defaultValue:require('prop-types').any,hideOnSelceted:require('prop-types').bool,hideOnHardwareBackPress:require('prop-types').bool,children:require('prop-types').any};exports.default=
 
 
 ActionSheet;
