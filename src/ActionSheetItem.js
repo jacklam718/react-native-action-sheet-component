@@ -43,6 +43,7 @@ type Props = {
   icon?: any;
   selectedIcon?: any;
   selected?: boolean;
+  showSelectedIcon?: boolean;
   onPress?: () => void;
   style?: any;
 }
@@ -53,15 +54,26 @@ const defaultProps = {
   index: null,
   selectedIcon: DEFAULT_SELECTED_ICON,
   selected: false,
+  showSelectedIcon: true,
   onPress: () => {},
   style: null,
 };
 
-function ActionSheetItem({ text, value, index, onPress, style, icon, selectedIcon, selected }: Props) {
+function ActionSheetItem({
+  text,
+  value,
+  index,
+  onPress,
+  style,
+  icon,
+  selectedIcon,
+  selected,
+  showSelectedIcon,
+}: Props) {
   let iconOnSelected;
   let itemIcon;
 
-  if (selected) {
+  if (selected && showSelectedIcon) {
     if (['number', 'string'].includes(typeof selectedIcon)) {
       iconOnSelected = <Image source={selectedIcon} style={styles.selectedIcon} />;
     } else {

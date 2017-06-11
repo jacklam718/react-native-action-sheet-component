@@ -64,6 +64,7 @@ type Props = {
   onChange?: () => void;
   multiple?: boolean;
   showSparator?: boolean;
+  showSelectedIcon?: boolean;
   value?: any;
   defaultValue?: any;
   hideOnSelceted?: boolean;
@@ -82,6 +83,7 @@ const defaultProps = {
   onChange: () => {},
   multiple: false,
   showSparator: true,
+  showSelectedIcon: true,
   value: null,
   defaultValue: null,
   hideOnSelceted: true,

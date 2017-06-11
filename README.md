@@ -156,6 +156,7 @@ actionSheet.hide(() => {
 | `style?` | `any` | `null` | |
 | `onChange?` | `Function` | `() => {}` | |
 | `show?` | `boolean` | `false` | |
+| `showSelectedIcon?` | `boolean` | `true` | | |
 | `multiple?` | `boolean` | `false` | |
 | `hideOnSelceted?` | `boolean` | `true` | |
 | `hideOnHardwareBackPress?` | `boolean` | `true` | |
@@ -173,5 +174,6 @@ actionSheet.hide(() => {
 | `index?` | `number` | `null` | | |
 | `selectedIcon?` | `number` | ` require('./img/checkmark.png')` | | |
 | `selected?` | `boolean` | `false` | | |
+| `showSelectedIcon?` | `boolean` | `true` | | |
 | `onPress?` | `Function` | `() => {}` | | |
 | `style?` | `any` | `null` | | |
