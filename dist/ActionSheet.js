@@ -23,12 +23,13 @@ var HARDWARE_BACK_PRESS_EVENT='hardwareBackPress';
 var styles=_reactNative.StyleSheet.create({
 container:{
 position:'absolute',
+flex:1,
 top:0,
 bottom:0,
-left:0,
-backgroundColor:'white'},
+left:0},
 
 contentContainer:{
+flex:1,
 position:'absolute',
 backgroundColor:'white'},
 
