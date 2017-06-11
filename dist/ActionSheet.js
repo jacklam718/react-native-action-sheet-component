@@ -2,21 +2,10 @@ Object.defineProperty(exports,"__esModule",{value:true});var _jsxFileName='src/A
 
 var _react=require('react');var _react2=_interopRequireDefault(_react);
 var _reactNative=require('react-native');
-
-
-
-
-
-
-
-
 var _reactNativeAnimatedOverlay=require('react-native-animated-overlay');var _reactNativeAnimatedOverlay2=_interopRequireDefault(_reactNativeAnimatedOverlay);
 var _lodash=require('lodash');var _lodash2=_interopRequireDefault(_lodash);
 
-var _Separator=require('./Separator');var _Separator2=_interopRequireDefault(_Separator);
-var _Animation=require('./Animation');var _Animation2=_interopRequireDefault(_Animation);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _toConsumableArray(arr){if(Array.isArray(arr)){for(var i=0,arr2=Array(arr.length);i<arr.length;i++){arr2[i]=arr[i];}return arr2;}else{return Array.from(arr);}}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}
-
-var BackHandler=_reactNative.BackHandler||_reactNative.BackAndroid;
+var _Separator=require('./Separator');var _Separator2=_interopRequireDefault(_Separator);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _toConsumableArray(arr){if(Array.isArray(arr)){for(var i=0,arr2=Array(arr.length);i<arr.length;i++){arr2[i]=arr[i];}return arr2;}else{return Array.from(arr);}}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}
 
 
 var ACTION_SHEET_OPENING='opening';
@@ -25,12 +14,29 @@ var ACTION_SHEET_CLOSING='closing';
 var ACTION_SHEET_CLOSED='closed';
 
 var DEFAULT_ANIMATION_DURATION=180;
-var INITIAL_POSITION=-180;
+
+
+var INITIAL_POSITION_BOTTOM=-180;
+var INITIAL_POSITION_TOP=0;
+var TO_POSITION_BOTTOM=180;
+var TO_POSITION_TOP=-360;
 
 
 var HARDWARE_BACK_PRESS_EVENT='hardwareBackPress';
 
 var styles=_reactNative.StyleSheet.create({
+containerTop:{
+flex:1,
+position:'absolute',
+backgroundColor:'white',
+top:INITIAL_POSITION_TOP},
+
+containerBottom:{
+flex:1,
+position:'absolute',
+backgroundColor:'white',
+bottom:INITIAL_POSITION_BOTTOM},
+
 container:{
 position:'absolute',
 flex:1,
@@ -139,11 +145,18 @@ props));_this.
 
 
 
+
+
 onOverlayPress=function(){
 if(_this.state.actionSheetState===ACTION_SHEET_OPENED){
 _this.hide();
 }
 };_this.
+
+
+
+
+
 
 
 
@@ -183,12 +196,15 @@ _this.setState({actionSheetHeight:height});
 show=function(){var callback=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};
 if([ACTION_SHEET_OPENING,ACTION_SHEET_OPENED].includes(_this.state.actionSheetState)){
 return;
-}var
+}var _this$props=
 
-onShow=_this.props.onShow;
+_this.props,onShow=_this$props.onShow,position=_this$props.position;
+var initialPosition=position==='top'?
+INITIAL_POSITION_TOP:
+INITIAL_POSITION_BOTTOM;
 
 _this.setState({show:true});
-_this.setActionSheetState(0,function(){
+_this.setActionSheetState(initialPosition,function(){
 onShow();
 callback();
 });
@@ -197,12 +213,15 @@ callback();
 hide=function(){var callback=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};
 if([ACTION_SHEET_CLOSING,ACTION_SHEET_CLOSED].includes(_this.state.actionSheetState)){
 return;
-}var
+}var _this$props2=
 
-onHide=_this.props.onHide;
+_this.props,onHide=_this$props2.onHide,position=_this$props2.position;
+var toPosition=position==='top'?
+TO_POSITION_TOP:
+TO_POSITION_BOTTOM;
 
 _this.setState({show:false});
-_this.setActionSheetState(0-_this.state.actionSheetHeight,function(){
+_this.setActionSheetState(toPosition,function(){
 onHide();
 callback();
 });
@@ -220,7 +239,7 @@ return;
 }
 
 _this.selectItem(value,index);
-};var initValue=props.value||props.defaultValue;initValue=Array.isArray(initValue)?initValue:initValue===null&&[]||[initValue];_this.state={show:props.show,selectedData:initValue,actionSheetState:ACTION_SHEET_CLOSED,actionSheetAnimation:new _Animation2.default(INITIAL_POSITION),actionSheetHeight:0};return _this;}_createClass(ActionSheet,[{key:'componentDidMount',value:function componentDidMount(){if(this.props.show){this.show();}BackHandler.addEventListener(HARDWARE_BACK_PRESS_EVENT,this.hardwareBackPressHandler);}},{key:'componentWillReceiveProps',value:function componentWillReceiveProps(nextProps){var _this2=this;if(this.props.show!==nextProps.show){if(nextProps.show){this.show();}else{this.hide();}}if(nextProps.value&&!_lodash2.default.isEqual(this.props.value,nextProps.value)){var selectedData=[];nextProps.value.forEach(function(value){if(!_this2.props.multiple&&selectedData.length!==0){return;}selectedData.push(value);});this.setState({selectedData:selectedData});}}},{key:'componentWillUnmount',value:function componentWillUnmount(){BackHandler.removeEventListener(HARDWARE_BACK_PRESS_EVENT);this.hide();}},{key:'setActionSheetState',value:function setActionSheetState(toValue){var _this3=this;var callback=arguments.length>1&&arguments[1]!==undefined?arguments[1]:function(){};var animationDuration=this.props.animationDuration;var isClosed=this.state.actionSheetState===ACTION_SHEET_CLOSED;var actionSheetState=isClosed?ACTION_SHEET_OPENING:ACTION_SHEET_CLOSING;this.setState({actionSheetState:actionSheetState});this.state.actionSheetAnimation.toValue(toValue,animationDuration,function(){var isClosing=_this3.state.actionSheetState===ACTION_SHEET_CLOSING;actionSheetState=isClosing?ACTION_SHEET_CLOSED:ACTION_SHEET_OPENED;_this3.setState({actionSheetState:actionSheetState});callback();});}},{key:'selectItem',value:function selectItem(
+};var isTop=props.position==='top';var initValue=props.value||props.defaultValue;initValue=Array.isArray(initValue)?initValue:initValue===null&&[]||[initValue];_this.state={show:props.show,selectedData:initValue,transformOffsetY:new _reactNative.Animated.Value(isTop?-180:0),actionSheetState:ACTION_SHEET_CLOSED,actionSheetHeight:0};return _this;}_createClass(ActionSheet,[{key:'componentDidMount',value:function componentDidMount(){if(this.props.show){this.show();}_reactNative.BackAndroid.addEventListener(HARDWARE_BACK_PRESS_EVENT,this.hardwareBackPressHandler);}},{key:'componentWillReceiveProps',value:function componentWillReceiveProps(nextProps){var _this2=this;if(this.props.show!==nextProps.show){if(nextProps.show){this.show();}else{this.hide();}}if(nextProps.value&&!_lodash2.default.isEqual(this.props.value,nextProps.value)){var selectedData=[];nextProps.value.forEach(function(value){if(!_this2.props.multiple&&selectedData.length!==0){return;}selectedData.push(value);});this.setState({selectedData:selectedData});}}},{key:'componentWillUnmount',value:function componentWillUnmount(){_reactNative.BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);this.hide();}},{key:'setActionSheetState',value:function setActionSheetState(toValue){var _this3=this;var callback=arguments.length>1&&arguments[1]!==undefined?arguments[1]:function(){};var duration=this.props.animationDuration;var isClosed=this.state.actionSheetState===ACTION_SHEET_CLOSED;var actionSheetState=isClosed?ACTION_SHEET_OPENING:ACTION_SHEET_CLOSING;this.setState({actionSheetState:actionSheetState});_reactNative.Animated.timing(this.state.transformOffsetY,{toValue:toValue,duration:duration,useNativeDriver:true,easing:_reactNative.Easing.inOut(_reactNative.Easing.quad)}).start(function(){var isClosing=_this3.state.actionSheetState===ACTION_SHEET_CLOSING;actionSheetState=isClosing?ACTION_SHEET_CLOSED:ACTION_SHEET_OPENED;_this3.setState({actionSheetState:actionSheetState});callback();});}},{key:'selectItem',value:function selectItem(
 
 value,index){var _props=
 this.props,isMultiSelect=_props.multiple,onChange=_props.onChange;
@@ -256,7 +275,7 @@ var separator=void 0;
 var selectedIndex=_this4.state.selectedData.indexOf(child.props.value);
 
 if(showSparator){
-separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:259}});
+separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:278}});
 }
 
 var item=(0,_react.cloneElement)(child,{
@@ -269,7 +288,7 @@ _this4.onItemPress(_selectedValue,_selectedIndex);
 
 
 return(
-_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:272}},
+_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:291}},
 item,
 separator));
 
@@ -279,7 +298,8 @@ separator));
 
 {var _props4=
 this.props,animationDuration=_props4.animationDuration,overlayOpacity=_props4.overlayOpacity,position=_props4.position,style=_props4.style;var _state=
-this.state,actionSheetState=_state.actionSheetState,animations=_state.actionSheetAnimation.animations;
+this.state,actionSheetState=_state.actionSheetState,transformOffsetY=_state.transformOffsetY;
+var isTop=position==='top';
 
 var overlayShow=false;
 var pointerEvents='none';
@@ -290,28 +310,37 @@ pointerEvents='auto';
 }
 
 var width={width:_reactNative.Dimensions.get('window').width};
-var actionSheetPosition=position==='top'?
-{top:animations.position}:
-{bottom:animations.position};
 
-var scrollView=position==='top'?
+var scrollView=isTop?
 {paddingTop:30}:
 null;
 
+var actionSheetStyle=isTop?
+styles.containerTop:
+styles.containerBottom;
+
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:302}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:323}},
 _react2.default.createElement(_reactNativeAnimatedOverlay2.default,{
 onPress:this.onOverlayPress,
 overlayShow:overlayShow,
 duration:animationDuration,
 opacity:overlayOpacity,
-pointerEvents:pointerEvents,__source:{fileName:_jsxFileName,lineNumber:303}}),
+pointerEvents:pointerEvents,
+useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:324}}),
 
 _react2.default.createElement(_reactNative.Animated.View,{
-style:[styles.contentContainer,style,width,actionSheetPosition],
-onLayout:this.getActionSheetHeight,__source:{fileName:_jsxFileName,lineNumber:310}},
+style:[
+actionSheetStyle,
+style,
+width,
+{
+transform:[{translateY:transformOffsetY}]}],
 
-_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView],__source:{fileName:_jsxFileName,lineNumber:314}},
+
+onLayout:this.getActionSheetHeight,__source:{fileName:_jsxFileName,lineNumber:332}},
+
+_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView],__source:{fileName:_jsxFileName,lineNumber:343}},
 this.renderItems()))));
 
 
