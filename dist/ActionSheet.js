@@ -1,12 +1,22 @@
-Object.defineProperty(exports,"__esModule",{value:true});var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();
+Object.defineProperty(exports,"__esModule",{value:true});var _jsxFileName='src/ActionSheet.js';var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();
 
 var _react=require('react');var _react2=_interopRequireDefault(_react);
 var _reactNative=require('react-native');
+
+
+
+
+
+
+
+
 var _reactNativeAnimatedOverlay=require('react-native-animated-overlay');var _reactNativeAnimatedOverlay2=_interopRequireDefault(_reactNativeAnimatedOverlay);
 var _lodash=require('lodash');var _lodash2=_interopRequireDefault(_lodash);
 
 var _Separator=require('./Separator');var _Separator2=_interopRequireDefault(_Separator);
 var _Animation=require('./Animation');var _Animation2=_interopRequireDefault(_Animation);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _toConsumableArray(arr){if(Array.isArray(arr)){for(var i=0,arr2=Array(arr.length);i<arr.length;i++){arr2[i]=arr[i];}return arr2;}else{return Array.from(arr);}}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}
+
+var BackHandler=_reactNative.BackHandler||_reactNative.BackAndroid;
 
 
 var ACTION_SHEET_OPENING='opening';
@@ -210,7 +220,7 @@ return;
 }
 
 _this.selectItem(value,index);
-};var initValue=props.value||props.defaultValue;initValue=Array.isArray(initValue)?initValue:initValue===null&&[]||[initValue];_this.state={show:props.show,selectedData:initValue,actionSheetState:ACTION_SHEET_CLOSED,actionSheetAnimation:new _Animation2.default(INITIAL_POSITION),actionSheetHeight:0};return _this;}_createClass(ActionSheet,[{key:'componentDidMount',value:function componentDidMount(){if(this.props.show){this.show();}_reactNative.BackAndroid.addEventListener(HARDWARE_BACK_PRESS_EVENT,this.hardwareBackPressHandler);}},{key:'componentWillReceiveProps',value:function componentWillReceiveProps(nextProps){var _this2=this;if(this.props.show!==nextProps.show){if(nextProps.show){this.show();}else{this.hide();}}if(nextProps.value&&!_lodash2.default.isEqual(this.props.value,nextProps.value)){var selectedData=[];nextProps.value.forEach(function(value){if(!_this2.props.multiple&&selectedData.length!==0){return;}selectedData.push(value);});this.setState({selectedData:selectedData});}}},{key:'componentWillUnmount',value:function componentWillUnmount(){_reactNative.BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);this.hide();}},{key:'setActionSheetState',value:function setActionSheetState(toValue){var _this3=this;var callback=arguments.length>1&&arguments[1]!==undefined?arguments[1]:function(){};var animationDuration=this.props.animationDuration;var isClosed=this.state.actionSheetState===ACTION_SHEET_CLOSED;var actionSheetState=isClosed?ACTION_SHEET_OPENING:ACTION_SHEET_CLOSING;this.setState({actionSheetState:actionSheetState});this.state.actionSheetAnimation.toValue(toValue,animationDuration,function(){var isClosing=_this3.state.actionSheetState===ACTION_SHEET_CLOSING;actionSheetState=isClosing?ACTION_SHEET_CLOSED:ACTION_SHEET_OPENED;_this3.setState({actionSheetState:actionSheetState});callback();});}},{key:'selectItem',value:function selectItem(
+};var initValue=props.value||props.defaultValue;initValue=Array.isArray(initValue)?initValue:initValue===null&&[]||[initValue];_this.state={show:props.show,selectedData:initValue,actionSheetState:ACTION_SHEET_CLOSED,actionSheetAnimation:new _Animation2.default(INITIAL_POSITION),actionSheetHeight:0};return _this;}_createClass(ActionSheet,[{key:'componentDidMount',value:function componentDidMount(){if(this.props.show){this.show();}BackHandler.addEventListener(HARDWARE_BACK_PRESS_EVENT,this.hardwareBackPressHandler);}},{key:'componentWillReceiveProps',value:function componentWillReceiveProps(nextProps){var _this2=this;if(this.props.show!==nextProps.show){if(nextProps.show){this.show();}else{this.hide();}}if(nextProps.value&&!_lodash2.default.isEqual(this.props.value,nextProps.value)){var selectedData=[];nextProps.value.forEach(function(value){if(!_this2.props.multiple&&selectedData.length!==0){return;}selectedData.push(value);});this.setState({selectedData:selectedData});}}},{key:'componentWillUnmount',value:function componentWillUnmount(){BackHandler.removeEventListener(HARDWARE_BACK_PRESS_EVENT);this.hide();}},{key:'setActionSheetState',value:function setActionSheetState(toValue){var _this3=this;var callback=arguments.length>1&&arguments[1]!==undefined?arguments[1]:function(){};var animationDuration=this.props.animationDuration;var isClosed=this.state.actionSheetState===ACTION_SHEET_CLOSED;var actionSheetState=isClosed?ACTION_SHEET_OPENING:ACTION_SHEET_CLOSING;this.setState({actionSheetState:actionSheetState});this.state.actionSheetAnimation.toValue(toValue,animationDuration,function(){var isClosing=_this3.state.actionSheetState===ACTION_SHEET_CLOSING;actionSheetState=isClosing?ACTION_SHEET_CLOSED:ACTION_SHEET_OPENED;_this3.setState({actionSheetState:actionSheetState});callback();});}},{key:'selectItem',value:function selectItem(
 
 value,index){var _props=
 this.props,isMultiSelect=_props.multiple,onChange=_props.onChange;
@@ -246,7 +256,7 @@ var separator=void 0;
 var selectedIndex=_this4.state.selectedData.indexOf(child.props.value);
 
 if(showSparator){
-separator=_react2.default.createElement(_Separator2.default,null);
+separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:259}});
 }
 
 var item=(0,_react.cloneElement)(child,{
@@ -259,7 +269,7 @@ _this4.onItemPress(_selectedValue,_selectedIndex);
 
 
 return(
-_react2.default.createElement(_reactNative.View,{style:{flex:1}},
+_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:272}},
 item,
 separator));
 
@@ -289,19 +299,19 @@ var scrollView=position==='top'?
 null;
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container]},
+_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:302}},
 _react2.default.createElement(_reactNativeAnimatedOverlay2.default,{
 onPress:this.onOverlayPress,
 overlayShow:overlayShow,
 duration:animationDuration,
 opacity:overlayOpacity,
-pointerEvents:pointerEvents}),
+pointerEvents:pointerEvents,__source:{fileName:_jsxFileName,lineNumber:303}}),
 
 _react2.default.createElement(_reactNative.Animated.View,{
 style:[styles.contentContainer,style,width,actionSheetPosition],
-onLayout:this.getActionSheetHeight},
+onLayout:this.getActionSheetHeight,__source:{fileName:_jsxFileName,lineNumber:310}},
 
-_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView]},
+_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollView],__source:{fileName:_jsxFileName,lineNumber:314}},
 this.renderItems()))));
 
 

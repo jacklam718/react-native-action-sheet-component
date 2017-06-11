@@ -1,4 +1,4 @@
-Object.defineProperty(exports,"__esModule",{value:true});
+Object.defineProperty(exports,"__esModule",{value:true});var _jsxFileName='src/ActionSheetItem.js';
 
 var _react=require('react');var _react2=_interopRequireDefault(_react);
 var _reactNative=require('react-native');function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}
@@ -63,14 +63,14 @@ var itemIcon=void 0;
 
 if(selected){
 if(['number','string'].includes(typeof selectedIcon)){
-iconOnSelected=_react2.default.createElement(_reactNative.Image,{source:selectedIcon,style:styles.selectedIcon});
+iconOnSelected=_react2.default.createElement(_reactNative.Image,{source:selectedIcon,style:styles.selectedIcon,__source:{fileName:_jsxFileName,lineNumber:66}});
 }else{
 iconOnSelected=selectedIcon;
 }
 }
 
 if(['number','string'].includes(typeof icon)){
-itemIcon=_react2.default.createElement(_reactNative.Image,{source:icon,style:styles.itemIcon});
+itemIcon=_react2.default.createElement(_reactNative.Image,{source:icon,style:styles.itemIcon,__source:{fileName:_jsxFileName,lineNumber:73}});
 }else{
 itemIcon=icon;
 }
@@ -80,16 +80,16 @@ _react2.default.createElement(_reactNative.TouchableHighlight,{
 onPress:function(_onPress){function onPress(){return _onPress.apply(this,arguments);}onPress.toString=function(){return _onPress.toString();};return onPress;}(function(){
 onPress(value,index);
 }),
-underlayColor:'#EDEDED'},
+underlayColor:'#EDEDED',__source:{fileName:_jsxFileName,lineNumber:79}},
 
-_react2.default.createElement(_reactNative.View,{style:[styles.container,style]},
-_react2.default.createElement(_reactNative.View,{style:styles.itemContent},
+_react2.default.createElement(_reactNative.View,{style:[styles.container,style],__source:{fileName:_jsxFileName,lineNumber:85}},
+_react2.default.createElement(_reactNative.View,{style:styles.itemContent,__source:{fileName:_jsxFileName,lineNumber:86}},
 itemIcon,
-_react2.default.createElement(_reactNative.Text,{style:styles.text},
+_react2.default.createElement(_reactNative.Text,{style:styles.text,__source:{fileName:_jsxFileName,lineNumber:88}},
 text)),
 
 
-_react2.default.createElement(_reactNative.View,{style:styles.itemContent},
+_react2.default.createElement(_reactNative.View,{style:styles.itemContent,__source:{fileName:_jsxFileName,lineNumber:92}},
 iconOnSelected))));
 
 
