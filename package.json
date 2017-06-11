@@ -27,7 +27,7 @@
     "babel-preset-react-native": "^1.9.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.8",
-    "react-native-animated-overlay": "^0.0.9",
+    "react-native-animated-overlay": "^0.0.10",
     "react-native-root-siblings": "^1.2.0"
   }
 }

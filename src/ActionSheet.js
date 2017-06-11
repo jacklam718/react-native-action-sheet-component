@@ -1,12 +1,22 @@
 // @flow
 
 import React, { Component, Children, cloneElement, type ReactElement } from 'react';
-import { View, Animated, StyleSheet, ScrollView, Dimensions, BackAndroid } from 'react-native';
+import {
+  View,
+  Animated,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  BackAndroid as RNBackAndroid,
+  BackHandler as RNBackHandler,
+} from 'react-native';
 import AnimatedOverlay from 'react-native-animated-overlay';
 import _ from 'lodash';
 
 import Separator from './Separator';
 import Animation from './Animation';
+
+const BackHandler = RNBackHandler || RNBackAndroid;
 
 // action sheet states
 const ACTION_SHEET_OPENING: string = 'opening';
@@ -100,7 +110,7 @@ class ActionSheet extends Component {
       this.show();
     }
 
-    BackAndroid.addEventListener(HARDWARE_BACK_PRESS_EVENT, this.hardwareBackPressHandler);
+    BackHandler.addEventListener(HARDWARE_BACK_PRESS_EVENT, this.hardwareBackPressHandler);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -125,7 +135,7 @@ class ActionSheet extends Component {
   }
 
   componentWillUnmount() {
-    BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
+    BackHandler.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
     this.hide();
   }
 
