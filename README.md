@@ -177,3 +177,4 @@ actionSheet.hide(() => {
 | `showSelectedIcon?` | `boolean` | `true` | | |
 | `onPress?` | `Function` | `() => {}` | | |
 | `style?` | `any` | `null` | | |
+| `textStyle?` | `any` | `null` | | |

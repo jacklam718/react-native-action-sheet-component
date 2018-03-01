@@ -46,6 +46,7 @@ type Props = {
   showSelectedIcon?: boolean;
   onPress?: () => void;
   style?: any;
+  textStyle?: any;
 }
 
 const defaultProps = {
@@ -57,6 +58,7 @@ const defaultProps = {
   showSelectedIcon: true,
   onPress: () => {},
   style: null,
+  textStyle: null,
 };
 
 function ActionSheetItem({
@@ -69,6 +71,7 @@ function ActionSheetItem({
   selectedIcon,
   selected,
   showSelectedIcon,
+  textStyle,
 }: Props) {
   let iconOnSelected;
   let itemIcon;
@@ -97,7 +100,7 @@ function ActionSheetItem({
       <View style={[styles.container, style]}>
         <View style={styles.itemContent}>
           {itemIcon}
-          <Text style={styles.text}>
+          <Text style={[styles.text, textStyle]}>
             {text}
           </Text>
         </View>
