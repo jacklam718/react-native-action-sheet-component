@@ -1,12 +1,28 @@
 Object.defineProperty(exports,"__esModule",{value:true});var _jsxFileName='src/ActionSheet.js';var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();
 
 var _react=require('react');var _react2=_interopRequireDefault(_react);
+
+
+
+
+
 var _reactNative=require('react-native');
+
+
+
+
+
+
+
+
+
 var _reactNativeAnimatedOverlay=require('react-native-animated-overlay');var _reactNativeAnimatedOverlay2=_interopRequireDefault(_reactNativeAnimatedOverlay);
 var _lodash=require('lodash');var _lodash2=_interopRequireDefault(_lodash);
 var _utils=require('./utils');
 
 var _Separator=require('./Separator');var _Separator2=_interopRequireDefault(_Separator);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _toConsumableArray(arr){if(Array.isArray(arr)){for(var i=0,arr2=Array(arr.length);i<arr.length;i++){arr2[i]=arr[i];}return arr2;}else{return Array.from(arr);}}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}
+
+var BackHandler=_reactNative.BackHandler||_reactNative.BackAndroid;
 
 
 var ACTION_SHEET_OPENING='opening';
@@ -120,7 +136,7 @@ if(this.props.show){
 this.show();
 }
 
-_reactNative.BackAndroid.addEventListener(HARDWARE_BACK_PRESS_EVENT,this.hardwareBackPressHandler);
+BackHandler.addEventListener(HARDWARE_BACK_PRESS_EVENT,this.hardwareBackPressHandler);
 }},{key:'componentWillReceiveProps',value:function componentWillReceiveProps(
 
 nextProps){var _this2=this;
@@ -145,7 +161,7 @@ this.setState({selectedData:selectedData});
 }},{key:'componentWillUnmount',value:function componentWillUnmount()
 
 {
-_reactNative.BackAndroid.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
+BackHandler.removeEventListener(HARDWARE_BACK_PRESS_EVENT);
 this.hide();
 }},{key:'setActionSheetState',value:function setActionSheetState(
 
@@ -281,7 +297,7 @@ var separator=void 0;
 var selectedIndex=_this4.state.selectedData.indexOf(child.props.value);
 
 if(showSparator){
-separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:284}});
+separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:300}});
 }
 
 var item=(0,_react.cloneElement)(child,{
@@ -295,7 +311,7 @@ _this4.onItemPress(_selectedValue,_selectedIndex);
 
 
 return(
-_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:298}},
+_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:314}},
 item,
 separator));
 
@@ -343,14 +359,14 @@ scrollViewStyle={height:maxHeight};
 }
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:346}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:362}},
 _react2.default.createElement(_reactNativeAnimatedOverlay2.default,{
 onPress:this.onOverlayPress,
 overlayShow:overlayShow,
 duration:animationDuration,
 opacity:overlayOpacity,
 pointerEvents:pointerEvents,
-useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:347}}),
+useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:363}}),
 
 _react2.default.createElement(_reactNative.Animated.View,{
 style:[
@@ -358,12 +374,12 @@ actionSheetStyle,
 style,
 width,
 {
-transform:[{translateY:transformOffsetY}]}],__source:{fileName:_jsxFileName,lineNumber:355}},
+transform:[{translateY:transformOffsetY}]}],__source:{fileName:_jsxFileName,lineNumber:371}},
 
 
 
-_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollViewStyle],__source:{fileName:_jsxFileName,lineNumber:365}},
-_react2.default.createElement(_reactNative.View,{onLayout:this.getActionSheetHeight,style:itemsStyle,__source:{fileName:_jsxFileName,lineNumber:366}},
+_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollViewStyle],__source:{fileName:_jsxFileName,lineNumber:381}},
+_react2.default.createElement(_reactNative.View,{onLayout:this.getActionSheetHeight,style:itemsStyle,__source:{fileName:_jsxFileName,lineNumber:382}},
 this.renderItems())))));
 
 
