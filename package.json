@@ -1,6 +1,6 @@
 {
   "name": "react-native-action-sheet-component",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "React Native Action Sheet Component for iOS & Android.",
   "main": "dist/index.js",
   "repository": "git@github.com:jacklam718/react-native-action-sheet-component.git",
