@@ -4,6 +4,7 @@ import React, { Component, Children, cloneElement, type ReactElement } from 'rea
 import { View, Animated, Easing, StyleSheet, ScrollView, Dimensions, BackAndroid } from 'react-native';
 import AnimatedOverlay from 'react-native-animated-overlay';
 import _ from 'lodash';
+import { calculateSize } from './utils';
 
 import Separator from './Separator';
 
@@ -18,8 +19,6 @@ const DEFAULT_ANIMATION_DURATION: number = 180;
 // action sheet positions
 const INITIAL_POSITION_BOTTOM: number = -180;
 const INITIAL_POSITION_TOP: number = 0;
-const TO_POSITION_BOTTOM: number = 180;
-const TO_POSITION_TOP: number = -360;
 
 // events
 const HARDWARE_BACK_PRESS_EVENT: string = 'hardwareBackPress';
@@ -89,6 +88,7 @@ const defaultProps = {
   hideOnSelceted: true,
   hideOnHardwareBackPress: true,
   children: null,
+  maxHeight: Dimensions.get('window').height / 2,
 };
 
 class ActionSheet extends Component {
@@ -109,7 +109,7 @@ class ActionSheet extends Component {
     this.state = {
       show: props.show,
       selectedData: initValue,
-      transformOffsetY: new Animated.Value(isTop ? -180 : 0),
+      transformOffsetY: new Animated.Value(100000),
       actionSheetState: ACTION_SHEET_CLOSED,
       actionSheetHeight: 0,
     };
@@ -191,7 +191,12 @@ class ActionSheet extends Component {
   getActionSheetHeight = (e: any): void => {
     const height = e.nativeEvent.layout.height;
     if (height && height !== this.state.actionSheetHeight) {
-      this.setState({ actionSheetHeight: height });
+      const isTop = this.props.position === 'top';
+      // let actionSheetHeight =
+      this.setState({
+        transformOffsetY: new Animated.Value(isTop ? -height : height),
+        actionSheetHeight: height,
+      });
     }
   }
 
@@ -202,8 +207,8 @@ class ActionSheet extends Component {
 
     const { onShow, position } = this.props;
     const initialPosition = position === 'top'
-      ? INITIAL_POSITION_TOP
-      : INITIAL_POSITION_BOTTOM;
+      ? 0
+      : -180;
 
     this.setState({ show: true });
     this.setActionSheetState(initialPosition, () => {
@@ -216,11 +221,10 @@ class ActionSheet extends Component {
     if ([ACTION_SHEET_CLOSING, ACTION_SHEET_CLOSED].includes(this.state.actionSheetState)) {
       return;
     }
-
     const { onHide, position } = this.props;
     const toPosition = position === 'top'
-      ? TO_POSITION_TOP
-      : TO_POSITION_BOTTOM;
+      ? -(this.state.actionSheetHeight)
+      : this.state.actionSheetHeight;
 
     this.setState({ show: false });
     this.setActionSheetState((toPosition), () => {
@@ -300,10 +304,20 @@ class ActionSheet extends Component {
   }
 
   render() {
-    const { animationDuration, overlayOpacity, position, style } = this.props;
-    const { actionSheetState, transformOffsetY } = this.state;
-    const isTop = position === 'top';
+    const {
+      animationDuration,
+      overlayOpacity,
+      position,
+      style,
+      maxHeight: _maxHeight,
+    } = this.props;
+    const {
+      actionSheetState,
+      transformOffsetY,
+      actionSheetHeight,
+    } = this.state;
 
+    const isTop = position === 'top';
     let overlayShow = false;
     let pointerEvents = 'none';
 
@@ -314,13 +328,19 @@ class ActionSheet extends Component {
 
     const width = { width: Dimensions.get('window').width };
 
-    const scrollView = isTop
+    let itemsStyle = isTop
       ? { paddingTop: 30 }
       : null;
 
     const actionSheetStyle = isTop
        ? styles.containerTop
        : styles.containerBottom;
+
+    let scrollViewStyle;
+    const maxHeight = calculateSize({ height: _maxHeight }).height;
+    if  (actionSheetHeight > maxHeight) {
+      scrollViewStyle = { height:  maxHeight };
+    }
 
     return (
       <View style={[styles.container]}>
@@ -341,10 +361,11 @@ class ActionSheet extends Component {
               transform: [{ translateY: transformOffsetY }],
             },
           ]}
-          onLayout={this.getActionSheetHeight}
         >
-          <ScrollView style={[styles.scrollView, scrollView]}>
-            {this.renderItems()}
+          <ScrollView style={[styles.scrollView, scrollViewStyle]}>
+            <View onLayout={this.getActionSheetHeight} style={itemsStyle}>
+              {this.renderItems()}
+            </View>
           </ScrollView>
         </Animated.View>
       </View>

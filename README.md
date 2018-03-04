@@ -164,6 +164,7 @@ actionSheet.hide(() => {
 | `animationDuration?` | `number` | `250` | |
 | `overlayOpacity?` | `number` | `0.3` | |
 | `position?` | `string` | `top` | |
+| `maxHeight?` | `number` | `Dimensions.get('window').height / 2` | |
 | `children?` | `any` | `null` | |
 
 ### ActionSheetItem
