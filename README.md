@@ -158,9 +158,12 @@ actionSheet.hide(() => {
 | `show?` | `boolean` | `false` | |
 | `showSelectedIcon?` | `boolean` | `true` | | |
 | `multiple?` | `boolean` | `false` | |
-| `hideOnSelceted?` | `boolean` | `true` | |
+| `hideOnSelected?` | `boolean` | `true` | |
+| `hideOnSelceted?` **_`DEPRECATED`_** | `boolean` | `true` | |
 | `hideOnHardwareBackPress?` | `boolean` | `true` | |
-| `showSparator?` | `boolean` | `true` | |
+| `showSeparator?` | `boolean` | `true` | |
+| `showSparator?` **_`DEPRECATED`_** | `boolean` | `true` | |
+| `scrollEnabled?` | `boolean` | `true` | |
 | `animationDuration?` | `number` | `250` | |
 | `overlayOpacity?` | `number` | `0.3` | |
 | `position?` | `string` | `top` | |
