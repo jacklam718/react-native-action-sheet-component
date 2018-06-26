@@ -87,6 +87,9 @@ scrollView:{}});
 
 
 
+
+
+
 var defaultProps={
 onShow:function onShow(){},
 onHide:function onHide(){},
@@ -98,12 +101,15 @@ style:null,
 onChange:function onChange(){},
 multiple:false,
 showSparator:true,
+showSeparator:true,
 showSelectedIcon:true,
 value:null,
 defaultValue:null,
 hideOnSelceted:true,
+hideOnSelected:true,
 hideOnHardwareBackPress:true,
 children:null,
+scrollEnabled:true,
 maxHeight:_reactNative.Dimensions.get('window').height/2};var
 
 
@@ -290,14 +296,14 @@ onChange(value,index,selectedData);
 }},{key:'renderItems',value:function renderItems()
 
 {var _this4=this;var _props3=
-this.props,children=_props3.children,showSparator=_props3.showSparator,showSelectedIcon=_props3.showSelectedIcon;
+this.props,children=_props3.children,showSparator=_props3.showSparator,showSeparator=_props3.showSeparator,showSelectedIcon=_props3.showSelectedIcon;
 
 return _react.Children.map(children,function(child){
 var separator=void 0;
 var selectedIndex=_this4.state.selectedData.indexOf(child.props.value);
 
-if(showSparator){
-separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:300}});
+if(showSparator&&showSeparator){
+separator=_react2.default.createElement(_Separator2.default,{__source:{fileName:_jsxFileName,lineNumber:306}});
 }
 
 var item=(0,_react.cloneElement)(child,{
@@ -313,7 +319,7 @@ style:child.props.style});
 
 
 return(
-_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:316}},
+_react2.default.createElement(_reactNative.View,{style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:322}},
 item,
 separator));
 
@@ -328,7 +334,8 @@ separator));
 
 
 
-this.props,animationDuration=_props4.animationDuration,overlayOpacity=_props4.overlayOpacity,position=_props4.position,style=_props4.style,_maxHeight=_props4.maxHeight;var _state=
+
+this.props,animationDuration=_props4.animationDuration,overlayOpacity=_props4.overlayOpacity,position=_props4.position,style=_props4.style,_maxHeight=_props4.maxHeight,scrollEnabled=_props4.scrollEnabled;var _state=
 
 
 
@@ -361,14 +368,14 @@ scrollViewStyle={height:maxHeight};
 }
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:364}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container],__source:{fileName:_jsxFileName,lineNumber:371}},
 _react2.default.createElement(_reactNativeAnimatedOverlay2.default,{
 onPress:this.onOverlayPress,
 overlayShow:overlayShow,
 duration:animationDuration,
 opacity:overlayOpacity,
 pointerEvents:pointerEvents,
-useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:365}}),
+useNativeDirver:true,__source:{fileName:_jsxFileName,lineNumber:372}}),
 
 _react2.default.createElement(_reactNative.Animated.View,{
 style:[
@@ -376,19 +383,19 @@ actionSheetStyle,
 style,
 width,
 {
-transform:[{translateY:transformOffsetY}]}],__source:{fileName:_jsxFileName,lineNumber:373}},
+transform:[{translateY:transformOffsetY}]}],__source:{fileName:_jsxFileName,lineNumber:380}},
 
 
 
-_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollViewStyle],__source:{fileName:_jsxFileName,lineNumber:383}},
-_react2.default.createElement(_reactNative.View,{onLayout:this.getActionSheetHeight,style:itemsStyle,__source:{fileName:_jsxFileName,lineNumber:384}},
+_react2.default.createElement(_reactNative.ScrollView,{style:[styles.scrollView,scrollViewStyle],scrollEnabled:scrollEnabled,__source:{fileName:_jsxFileName,lineNumber:390}},
+_react2.default.createElement(_reactNative.View,{onLayout:this.getActionSheetHeight,style:itemsStyle,__source:{fileName:_jsxFileName,lineNumber:391}},
 this.renderItems())))));
 
 
 
 
 
-}}]);return ActionSheet;}(_react.Component);ActionSheet.defaultProps=defaultProps;var _initialiseProps=function _initialiseProps(){var _this5=this;this.onOverlayPress=function(){if(_this5.state.actionSheetState===ACTION_SHEET_OPENED){_this5.hide();}};this.hardwareBackPressHandler=function(){var hideOnHardwareBackPress=_this5.props.hideOnHardwareBackPress;if(hideOnHardwareBackPress&&_this5.state.show){_this5.hide();return true;}return false;};this.getActionSheetHeight=function(e){var height=e.nativeEvent.layout.height;if(height&&height!==_this5.state.actionSheetHeight){var isTop=_this5.props.position==='top';_this5.setState({transformOffsetY:new _reactNative.Animated.Value(isTop?-height:height),actionSheetHeight:height});}};this.show=function(){var callback=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};if([ACTION_SHEET_OPENING,ACTION_SHEET_OPENED].includes(_this5.state.actionSheetState)){return;}var _props5=_this5.props,onShow=_props5.onShow,position=_props5.position;var initialPosition=position==='top'?0:-180;_this5.setState({show:true});_this5.setActionSheetState(initialPosition,function(){onShow();callback();});};this.hide=function(){var callback=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};if([ACTION_SHEET_CLOSING,ACTION_SHEET_CLOSED].includes(_this5.state.actionSheetState)){return;}var _props6=_this5.props,onHide=_props6.onHide,position=_props6.position;var toPosition=position==='top'?-_this5.state.actionSheetHeight:_this5.state.actionSheetHeight;_this5.setState({show:false});_this5.setActionSheetState(toPosition,function(){onHide();callback();});};this.onItemPress=function(value,index){var hideOnSelceted=_this5.props.hideOnSelceted;if(hideOnSelceted){_this5.hide();}if(Object.values(_this5.state.selectedData).includes(value)){_this5.unselectItem(value,index);return;}_this5.selectItem(value,index);};};ActionSheet.propTypes={onShow:require('prop-types').func,onHide:require('prop-types').func,show:require('prop-types').bool,animationDuration:require('prop-types').number,overlayOpacity:require('prop-types').number,position:require('prop-types').oneOf(['top','bottom']),style:require('prop-types').any,onChange:require('prop-types').func,multiple:require('prop-types').bool,showSparator:require('prop-types').bool,showSelectedIcon:require('prop-types').bool,value:require('prop-types').any,defaultValue:require('prop-types').any,hideOnSelceted:require('prop-types').bool,hideOnHardwareBackPress:require('prop-types').bool,children:require('prop-types').any};exports.default=
+}}]);return ActionSheet;}(_react.Component);ActionSheet.defaultProps=defaultProps;var _initialiseProps=function _initialiseProps(){var _this5=this;this.onOverlayPress=function(){if(_this5.state.actionSheetState===ACTION_SHEET_OPENED){_this5.hide();}};this.hardwareBackPressHandler=function(){var hideOnHardwareBackPress=_this5.props.hideOnHardwareBackPress;if(hideOnHardwareBackPress&&_this5.state.show){_this5.hide();return true;}return false;};this.getActionSheetHeight=function(e){var height=e.nativeEvent.layout.height;if(height&&height!==_this5.state.actionSheetHeight){var isTop=_this5.props.position==='top';_this5.setState({transformOffsetY:new _reactNative.Animated.Value(isTop?-height:height),actionSheetHeight:height});}};this.show=function(){var callback=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};if([ACTION_SHEET_OPENING,ACTION_SHEET_OPENED].includes(_this5.state.actionSheetState)){return;}var _props5=_this5.props,onShow=_props5.onShow,position=_props5.position;var initialPosition=position==='top'?0:-180;_this5.setState({show:true});_this5.setActionSheetState(initialPosition,function(){onShow();callback();});};this.hide=function(){var callback=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};if([ACTION_SHEET_CLOSING,ACTION_SHEET_CLOSED].includes(_this5.state.actionSheetState)){return;}var _props6=_this5.props,onHide=_props6.onHide,position=_props6.position;var toPosition=position==='top'?-_this5.state.actionSheetHeight:_this5.state.actionSheetHeight;_this5.setState({show:false});_this5.setActionSheetState(toPosition,function(){onHide();callback();});};this.onItemPress=function(value,index){var _props7=_this5.props,hideOnSelceted=_props7.hideOnSelceted,hideOnSelected=_props7.hideOnSelected;if(hideOnSelceted&&hideOnSelected){_this5.hide();}if(Object.values(_this5.state.selectedData).includes(value)){_this5.unselectItem(value,index);return;}_this5.selectItem(value,index);};};ActionSheet.propTypes={onShow:require('prop-types').func,onHide:require('prop-types').func,show:require('prop-types').bool,animationDuration:require('prop-types').number,overlayOpacity:require('prop-types').number,position:require('prop-types').oneOf(['top','bottom']),style:require('prop-types').any,onChange:require('prop-types').func,multiple:require('prop-types').bool,showSparator:require('prop-types').bool,showSeparator:require('prop-types').bool,showSelectedIcon:require('prop-types').bool,value:require('prop-types').any,defaultValue:require('prop-types').any,hideOnSelceted:require('prop-types').bool,hideOnSelected:require('prop-types').bool,hideOnHardwareBackPress:require('prop-types').bool,children:require('prop-types').any,scrollEnabled:require('prop-types').bool};exports.default=
 
 
 ActionSheet;
