@@ -308,6 +308,8 @@ class ActionSheet extends Component {
           child.props.onPress(_selectedValue, _selectedIndex);
           this.onItemPress(_selectedValue, _selectedIndex);
         },
+        textStyle: child.props.textStyle,
+        style: child.props.style,
       });
 
       return (
@@ -344,7 +346,7 @@ class ActionSheet extends Component {
 
     const width = { width: Dimensions.get('window').width };
 
-    let itemsStyle = isTop
+    const itemsStyle = isTop
       ? { paddingTop: 30 }
       : null;
 
@@ -354,8 +356,8 @@ class ActionSheet extends Component {
 
     let scrollViewStyle;
     const maxHeight = calculateSize({ height: _maxHeight }).height;
-    if  (actionSheetHeight > maxHeight) {
-      scrollViewStyle = { height:  maxHeight };
+    if (actionSheetHeight > maxHeight) {
+      scrollViewStyle = { height: maxHeight };
     }
 
     return (
