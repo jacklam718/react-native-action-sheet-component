@@ -79,12 +79,15 @@ type Props = {
   onChange?: () => void;
   multiple?: boolean;
   showSparator?: boolean;
+  showSeparator?: boolean;
   showSelectedIcon?: boolean;
   value?: any;
   defaultValue?: any;
   hideOnSelceted?: boolean;
+  hideOnSelected?: boolean;
   hideOnHardwareBackPress?: boolean;
   children?: any;
+  scrollEnabled?: boolean;
 };
 
 const defaultProps = {
@@ -98,12 +101,15 @@ const defaultProps = {
   onChange: () => {},
   multiple: false,
   showSparator: true,
+  showSeparator: true,
   showSelectedIcon: true,
   value: null,
   defaultValue: null,
   hideOnSelceted: true,
+  hideOnSelected: true,
   hideOnHardwareBackPress: true,
   children: null,
+  scrollEnabled: true,
   maxHeight: Dimensions.get('window').height / 2,
 };
 
@@ -250,8 +256,8 @@ class ActionSheet extends Component {
   }
 
   onItemPress = (value, index): void => {
-    const { hideOnSelceted } = this.props;
-    if (hideOnSelceted) {
+    const { hideOnSelceted, hideOnSelected } = this.props;
+    if (hideOnSelceted && hideOnSelected) {
       this.hide();
     }
 
@@ -290,13 +296,13 @@ class ActionSheet extends Component {
   }
 
   renderItems(): ReactElement {
-    const { children, showSparator, showSelectedIcon } = this.props;
+    const { children, showSparator, showSeparator , showSelectedIcon } = this.props;
 
     return Children.map(children, (child) => {
       let separator;
       const selectedIndex = this.state.selectedData.indexOf(child.props.value);
 
-      if (showSparator) {
+      if (showSparator && showSeparator) {
         separator = <Separator />;
       }
 
@@ -328,6 +334,7 @@ class ActionSheet extends Component {
       position,
       style,
       maxHeight: _maxHeight,
+      scrollEnabled,
     } = this.props;
     const {
       actionSheetState,
@@ -380,7 +387,7 @@ class ActionSheet extends Component {
             },
           ]}
         >
-          <ScrollView style={[styles.scrollView, scrollViewStyle]}>
+          <ScrollView style={[styles.scrollView, scrollViewStyle]} scrollEnabled={scrollEnabled}>
             <View onLayout={this.getActionSheetHeight} style={itemsStyle}>
               {this.renderItems()}
             </View>
